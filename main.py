@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 from bot.handlers.handlers import function
 
 load_dotenv(".env")
-bott=os.getenv('Bott')
-bot=Bot(token=bott)
+bot=os.getenv('Bot')
+bot=Bot(token=bot)
 dp = Dispatcher()
 
 
