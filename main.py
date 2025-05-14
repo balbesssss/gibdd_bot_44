@@ -7,13 +7,13 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 TOKEN = os.getenv('TOKEN')
 BOT = Bot(token=TOKEN)
-DB = Dispatcher()
+DP = Dispatcher()
 
 
 async def main():
     """Запуск бота"""
     try:
-        await DB.start_polling(BOT, skip_updatet=True)
+        await DP.start_polling(BOT, skip_updatet=True)
     finally:
         await BOT.session.close()
 
