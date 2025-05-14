@@ -13,7 +13,7 @@ class Table(Model):
 
 class User(Table):
     """Класс пользователя"""
-    tg_id = IntegerField(null=True)
+    tg_id = IntegerField(null=False, unique=True)
     username = CharField(null=True)
     last_name = CharField(null=True)
     first_name = CharField(null=True)
