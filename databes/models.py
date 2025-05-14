@@ -4,14 +4,14 @@ from peewee import SqliteDatabase, Model, CharField, IntegerField
 DB = SqliteDatabase('sqlite.db')
 
 
-class BaseModel(Model):
+class Table(Model):
     """Базовая модель"""
     class Meta:
         """Класс мета"""
         database = DB
 
 
-class User(BaseModel):
+class User(Table):
     """Класс пользователя"""
     tg_id = IntegerField(null=True)
     username = CharField(null=True)
