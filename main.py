@@ -5,17 +5,17 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
 load_dotenv(".env")
-bot = os.getenv('Bot')
-bot = Bot(token=bot)
-dp = Dispatcher()
+TOKEN = os.getenv('TOKEN')
+BOT = Bot(token=TOKEN)
+DB = Dispatcher()
 
 
 async def main():
     """Запуск бота"""
     try:
-        await dp.start_polling(bot, skip_updatet=True)
+        await DB.start_polling(BOT, skip_updatet=True)
     finally:
-        await bot.session.close()
+        await BOT.session.close()
 
 if __name__ == '__main__':
     asyncio.run(main())
