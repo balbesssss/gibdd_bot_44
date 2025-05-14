@@ -7,11 +7,11 @@ class BaseModel(Model):
         database = DB
 
 class User(BaseModel):
-    tg_id = IntegerField()
-    username = CharField()
-    last_name = CharField()
-    first_name = CharField()
-    telephone = IntegerField()
+    tg_id = IntegerField(null=True)
+    username = CharField(null=True)
+    last_name = CharField(null=True)
+    first_name = CharField(null=True)
+    telephone = IntegerField(null=True)
 
 if __name__ == "__main__":
     DB.connect()
