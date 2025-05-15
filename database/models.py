@@ -1,7 +1,9 @@
 """Модуль для базы данных"""
 from datetime import datetime
-from peewee import SqliteDatabase, Model, \
-                   CharField, IntegerField, DateTimeField, ForeignKeyField, TextField
+from peewee import (
+    SqliteDatabase, Model, CharField, IntegerField,
+    DateTimeField, ForeignKeyField
+)
 # pylint: disable=R0903
 DB = SqliteDatabase('sqlite.db')
 
@@ -37,7 +39,7 @@ class UserRole(Table):
 class Message(Table):
     """Класс сообщений пользователя"""
     user = ForeignKeyField(User, on_update='CASCADE', on_delete='CASCADE')
-    text = TextField()
+    text = CharField(max_length=4096)
     at_created = DateTimeField(default=datetime.now())
 
 
