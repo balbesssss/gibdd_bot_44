@@ -7,7 +7,7 @@ from database.models import User
 router = Router()
 
 
-@router.massage(CommandStart())
+@router.message(CommandStart())
 async def cmd_start(message: Message):
     """Обработчик команды start"""
 
