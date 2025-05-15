@@ -18,11 +18,11 @@ async def cmd_start(message: Message):
 
     user = User.get_or_none(tg_id=message.from_user.id)
 
-    if user in None:
+    if user is None:
         User.create(
             tg_id=message.from_user.id,
             username=message.from_user.username,
-            last_name=message.from_user,
+            last_name=message.from_user.last_name,
             first_name=message.from_user.first_name,
         )
 
@@ -31,8 +31,7 @@ async def cmd_start(message: Message):
         User.last_name != message.from_user.last_name or
         User.first_name != message.from_user.first_name
     ):
-        User.update(
-            username=message.from_user.username,
-            last_name=message.from_user.last_name,
-            first_name=message.from_user.first_name,
-            )
+        user.username = message.from_user.username
+        user.last_name = message.from_user.last_name
+        user.first_name = message.from_user.first_name
+        user.save()
