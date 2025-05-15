@@ -1,10 +1,21 @@
 """Библеотеки для проверки пользователя"""
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
-from database.models import User
+from database.models import User, UserRole
 
 
 class IsUser(BaseFilter):
     """Проверяет, является ли пользователь."""
+
+    role = None
+
     async def __call__(self, message: Message) -> bool:
-        return User.get_or_none(tg_id=message.from_user.id) is not None
+        user = User.get_or_none(tg_id=message.from_user.id) is not None
+        if user is None:
+            return False
+
+        user_role = UserRole.get_or_none(
+            user=User.get(tg_id=message.from_user.id),
+            role=self.role
+        )
+        return user_role is not None
