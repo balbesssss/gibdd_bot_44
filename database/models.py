@@ -1,7 +1,7 @@
 """Модуль для базы данных"""
+from datetime import datetime
 from peewee import SqliteDatabase, Model, \
                    CharField, IntegerField, DateTimeField
-from datetime import datetime
 # pylint: disable=R0903
 DB = SqliteDatabase('sqlite.db')
 
