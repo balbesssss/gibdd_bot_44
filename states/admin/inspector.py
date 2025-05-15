@@ -5,4 +5,4 @@ from aiogram.fsm.state import State, StatesGroup
 
 class AddInspector(StatesGroup):
     """Класс для описания состояния"""
-    contact = State()
+    get_contact = State()
