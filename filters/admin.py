@@ -1,4 +1,4 @@
-"""Библеотеки для проверки пользователя"""
+"""Библеотеки для проверки Администратора"""
 from aiogram.types import Message
 from database.models import Role, UserRole, User
 from filters.user import IsUser

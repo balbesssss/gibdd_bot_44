@@ -1,3 +1,4 @@
+"""Библеотеки для проверки пользователя"""
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
 from database.models import User
