@@ -1,10 +1,10 @@
 """подключение роутеров"""
 from aiogram import Dispatcher
-from .user import add_routers as user_add_routers
-from .admin import add_routers as admin_add_routers
+from .add_admin import router as admin_router
 
 
 def add_routers(dp: Dispatcher):
     """Подключение роутеров"""
-    user_add_routers(dp)
-    admin_add_routers(dp)
+    dp.include_routers(
+        admin_router
+    )
