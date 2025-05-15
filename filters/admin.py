@@ -4,13 +4,25 @@ from aiogram.types import Message
 from database.models import Role, UserRole, User
 
 
-class CheakAdmin(BaseFilter):
-    """Проверяет является ли пользователь Администратором"""
-    role = Role.get(Role.name == "Администратор")
-
-    async def __call__(self, message: Message):
-        if user := User.get_or_none(User.tg_id == message.from_user.id):
-            if user_role := UserRole.get_or_none(UserRole.user == user):
-                if user_role.role == self.role:
-                    return True
+class IsUser(BaseFilter):
+    """Проверяет, является ли пользователь."""
+    async def __call__(self, message: Message) -> bool:
+        if User.get_or_none(tg_id=message.from_user.id):
+            return True
         return False
+
+
+class IsAdmin(IsUser):
+    """Проверяет является ли пользователь Администратором"""
+    role = Role.get(name="Администратор")
+
+    async def __call__(self, message: Message) -> bool:
+        is_user = await super().__call__(message)
+        if not is_user:
+            return False
+
+        user_role = UserRole.get_or_none(
+            user=User.get(tg_id=message.from_user.id),
+            role=self.role
+        )
+        return user_role is not None
