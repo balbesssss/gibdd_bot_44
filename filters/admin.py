@@ -7,9 +7,7 @@ from database.models import Role, UserRole, User
 class IsUser(BaseFilter):
     """Проверяет, является ли пользователь."""
     async def __call__(self, message: Message) -> bool:
-        if User.get_or_none(tg_id=message.from_user.id):
-            return True
-        return False
+        return User.get_or_none(tg_id=message.from_user.id) is not None
 
 
 class IsAdmin(IsUser):
