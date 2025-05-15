@@ -10,8 +10,10 @@ router = Router()
 async def cmd_start(message: Message):
     """Обработчик команды start"""
 
-    await message.answer(text='Добрый день.' 
-                        'Через этого бота Вы можете отправить анонимное сообщение о пьяном водителе')
+    await message.answer(
+        text='Добрый день.Через этого бота '
+        'Вы можете отправить анонимное сообщение о пьяном водителе'
+    )
     
     user = User.get_or_none(tg_id = message.from_user.id)
     
