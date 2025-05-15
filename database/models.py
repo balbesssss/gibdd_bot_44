@@ -1,7 +1,7 @@
 """Модуль для базы данных"""
 from datetime import datetime
 from peewee import SqliteDatabase, Model, \
-                   CharField, IntegerField, DateTimeField
+                   CharField, IntegerField, DateTimeField, ForeignKeyField
 # pylint: disable=R0903
 DB = SqliteDatabase('sqlite.db')
 
@@ -23,7 +23,25 @@ class User(Table):
     phone = IntegerField(null=True)
 
 
+class Role(Table):
+    """Класс ролей"""
+    name = CharField()
+
+
+class UserRole(Table):
+    """Класс роли пользователей"""
+    user = ForeignKeyField(User, on_update='CASCADE', on_delete='CASCADE')
+    role = ForeignKeyField(Role, on_update='CASCADE', on_delete='CASCADE')
+
+
 if __name__ == "__main__":
     DB.connect()
-    DB.create_tables([User], safe=True)
+    DB.create_tables([User, Role, UserRole], safe=True)
     DB.close()
+    admin_role, _ = Role.get_or_create(name='Администратор')
+    Role.get_or_create(name='Инспектор')
+    admin, _ = User.get_or_create(tg_id=320720102)
+    UserRole.get_or_create(
+        user=admin,
+        role=admin_role,
+    )
