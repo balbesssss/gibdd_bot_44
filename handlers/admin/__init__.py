@@ -7,6 +7,6 @@ from .add_admin import router as add_admin_router
 def add_routers(dp: Dispatcher):
     """Подключение роутеров"""
     dp.include_routers(
-        add_inspector_router
+        add_inspector_router,
         add_admin_router
     )
