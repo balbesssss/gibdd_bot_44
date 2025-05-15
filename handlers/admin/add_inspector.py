@@ -1,50 +1,45 @@
-"""Обработчик добавления инспектора администратором Addinspector"""
+"""Обработчик добавления инспектора администратором"""
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from database.models import User, Role, UserRole
 from states.admin.inspector import AddInspector
+from filters.admin import IsAdmin
 
 router = Router()
 
 
-@router.message(F.text.lower() == "Добавить инспектора")
+@router.message(F.text() == "Добавить инспектора", IsAdmin())
 async def add_inspector_start(message: Message, state: FSMContext):
     """Обработчик начала добавления инспектора"""
-    user = User.get_or_none(tg_id=message.from_user.id)
-    if not user:
-        return
-
-    admin_role = Role.get_or_none(name='Администратор')
-    is_admin = UserRole.get_or_none(user=user, role=admin_role)
-
-    if not is_admin:
-        await message.answer("У вас нет прав администратора")
-        return
-
-    await message.answer(
-        "Введите ID пользователя Telegram, "
-        "которого хотите назначить инспектором"
-    )
+    await message.answer("Отправьте контакт сотрудника")
     await state.set_state(AddInspector.get_contact)
 
 
 @router.message(AddInspector.get_contact)
 async def add_inspector_process(message: Message, state: FSMContext):
-    """Обработчик получения ID инспектора"""
-    try:
-        inspector_id = int(message.text.strip())
-    except ValueError:
-        await message.answer(
-            "Введите корректный ID пользователя (только цифры)"
-        )
-        return
+    """Обработчик получения контакта инспектора"""
+    if message.contact:
+        phone = message.contact.phone_number
+        user_id = message.contact.user_id
 
-    inspector, created = User.get_or_create(tg_id=inspector_id)
-    if created:
-        await message.answer(
-            f"Пользователь с ID {inspector_id} добавлен в систему"
-        )
+        inspector, created = User.get_or_create(tg_id=user_id)
+
+        if created:
+            inspector.phone = phone
+            inspector.username = message.contact.username
+            inspector.first_name = message.contact.first_name
+            inspector.last_name = message.contact.last_name
+            inspector.save()
+    else:
+        try:
+            user_id = int(message.text.strip())
+            inspector, _ = User.get_or_create(tg_id=user_id)
+        except ValueError:
+            await message.answer(
+                "Пожалуйста, отправьте контакт сотрудника или введите его ID"
+            )
+            return
 
     inspector_role = Role.get_or_none(name='Инспектор')
     if not inspector_role:
@@ -52,15 +47,6 @@ async def add_inspector_process(message: Message, state: FSMContext):
         await state.clear()
         return
 
-    existing_role = UserRole.get_or_none(user=inspector, role=inspector_role)
-    if existing_role:
-        await message.answer(
-            f"Пользователь с ID {inspector_id} уже является инспектором"
-        )
-    else:
-        UserRole.create(user=inspector, role=inspector_role)
-        await message.answer(
-            f"Пользователь с ID {inspector_id} назначен инспектором"
-        )
-
+    UserRole.get_or_create(user=inspector, role=inspector_role)
+    await message.answer("Роль Инспектор добавлена")
     await state.clear()
