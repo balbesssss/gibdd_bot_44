@@ -81,7 +81,7 @@ jobs:
 
 
     - name: Install dependencies
-      run: pip install flake8 astroid==2.12.13 pylint pylint-peewee
+      run: pip install flake8 pylint
   
     - name: Run flake8
       run: flake8 .
