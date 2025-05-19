@@ -1,12 +1,12 @@
 """Обработчик добавления инспектора администратором"""
 
 from aiogram import Router, F
-from aiogram.types import Message, ContentType
+from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from states.admin.inspector import AddInspector
 from filters.admin import IsAdmin
-from database.models import User, UserRole
 from filters.inspector import IsInspector
+from database.models import User, UserRole
 router = Router()
 
 
