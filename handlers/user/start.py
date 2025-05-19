@@ -35,6 +35,6 @@ async def cmd_start(message: Message):
         (UserRole.role == IsAdmin.role)
     )
 
-    await message.answer("Добрый день.Через этого бота "
-                         "Вы можете отправить анонимное сообщение о пьяном водителе.\n",
+    await message.answer("Добрый день.Через этого бота Вы можете "
+                         "отправить анонимное сообщение о пьяном водителе.",
                          reply_markup=KB if is_admin else None)
