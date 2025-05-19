@@ -3,7 +3,9 @@
 from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
-from database.models import User
+from database.models import User, UserRole
+from filters.admin import IsAdmin
+from keyboards.admin import KB
 
 router = Router()
 
@@ -11,14 +13,7 @@ router = Router()
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     """Обработчик команды start"""
-
-    await message.answer(
-        text="Добрый день.Через этого бота "
-        "Вы можете отправить анонимное сообщение о пьяном водителе"
-    )
-
     user = User.get_or_none(tg_id=message.from_user.id)
-
     if user is None:
         User.create(
             tg_id=message.from_user.id,
@@ -36,3 +31,12 @@ async def cmd_start(message: Message):
         user.last_name = message.from_user.last_name
         user.first_name = message.from_user.first_name
         user.save()
+    is_admin = UserRole.get_or_none(
+        (UserRole.user == user) & (UserRole.role == IsAdmin.role)
+    )
+
+    await message.answer(
+        "Добрый день.Через этого бота Вы можете "
+        "отправить анонимное сообщение о пьяном водителе.",
+        reply_markup=KB if is_admin else None,
+    )
