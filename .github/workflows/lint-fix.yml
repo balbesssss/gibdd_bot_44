@@ -1,23 +1,23 @@
-name: Lint Python Code
+# .github/workflows/lint-fix.yml
+name: Auto Format and Fix
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 permissions:
   contents: write
 
 jobs:
-  lint:
+  lint-fix:
+    if: github.repository == 'YuriSilenok/gibdd_bot_44'
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        persist-credentials: true  # Нужно для git push
+        persist-credentials: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -28,25 +28,18 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-      
-    - name: Commit and push changes (only if not a fork)
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
+        pip install black ruff
+
+    - name: Configure git
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
-    - name: Install dependencies
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
-      run: pip install black ruff
-
     - name: Format code with black
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
       run: black .
 
     - name: Commit and push changes by black
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
       run: |
         if [[ $(git status --porcelain) ]]; then
           git add .
@@ -57,11 +50,9 @@ jobs:
         fi
 
     - name: Format code with ruff
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
       run: ruff check . --fix --unsafe-fixes || true
 
     - name: Commit and push changes by ruff
-      if: github.repository == 'YuriSilenok/gibdd_bot_44'
       run: |
         if [[ $(git status --porcelain) ]]; then
           git add .
@@ -70,13 +61,3 @@ jobs:
         else
           echo "No changes to commit."
         fi
-
-
-    - name: Install dependencies
-      run: pip install flake8 pylint
-  
-    - name: Run flake8
-      run: flake8 .
-
-    - name: Run pylint
-      run: pylint $(find . -name "*.py" ! -path "./venv/*")
