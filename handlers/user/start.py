@@ -6,6 +6,7 @@ from aiogram.types import Message
 from database.models import User, UserRole
 from filters.admin import IsAdmin
 from keyboards.admin import KB
+
 router = Router()
 
 
@@ -31,10 +32,11 @@ async def cmd_start(message: Message):
         user.first_name = message.from_user.first_name
         user.save()
     is_admin = UserRole.get_or_none(
-        (UserRole.user == user) &
-        (UserRole.role == IsAdmin.role)
+        (UserRole.user == user) & (UserRole.role == IsAdmin.role)
     )
 
-    await message.answer("Добрый день.Через этого бота Вы можете "
-                         "отправить анонимное сообщение о пьяном водителе.",
-                         reply_markup=KB if is_admin else None)
+    await message.answer(
+        "Добрый день.Через этого бота Вы можете "
+        "отправить анонимное сообщение о пьяном водителе.",
+        reply_markup=KB if is_admin else None,
+    )
