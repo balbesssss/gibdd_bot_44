@@ -1,4 +1,5 @@
 """Добавление ролей"""
+
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.types.contact import Contact
@@ -8,6 +9,7 @@ from states.admin.admin import AddAdmin
 from filters.admin import IsAdmin
 from filters.inspector import IsInspector
 from database.models import Role, User, UserRole
+
 router = Router()
 
 
@@ -19,10 +21,8 @@ async def add_admin_start(message: Message, state: FSMContext):
 
 
 async def add_role(
-        message: Message,
-        state: FSMContext,
-        contact: Contact,
-        role: Role):
+    message: Message, state: FSMContext, contact: Contact, role: Role
+):
     """Добавление роли"""
     user = User.get_or_none(User.tg_id == contact.user_id)
     if not user:
@@ -42,10 +42,12 @@ async def add_role(
         user.first_name = contact.first_name
         user.save()
 
-    return UserRole.get_or_none(
-        (UserRole.user == user) &
-        (UserRole.role == role)
-    ), user
+    return (
+        UserRole.get_or_none(
+            (UserRole.user == user) & (UserRole.role == role)
+        ),
+        user,
+    )
 
 
 @router.message(F.contact, IsAdmin(), AddAdmin.get_contact)
@@ -63,12 +65,10 @@ async def get_admin_contact(message: Message, state: FSMContext):
 
     if user_role:
         await message.answer(
-            "Этому сотруднику уже выдавалась роль администратора")
-    else:
-        UserRole.create(
-            user=user,
-            role=IsAdmin.role
+            "Этому сотруднику уже выдавалась роль администратора"
         )
+    else:
+        UserRole.create(user=user, role=IsAdmin.role)
         await message.answer("Роль администратора добавлена")
     await state.clear()
 
@@ -94,12 +94,8 @@ async def get_inspector_contact(message: Message, state: FSMContext):
         return
 
     if user_role:
-        await message.answer(
-            "Этому сотруднику уже выдавалась роль инспектора")
+        await message.answer("Этому сотруднику уже выдавалась роль инспектора")
     else:
-        UserRole.get_or_create(
-            user=user,
-            role=IsInspector.role
-        )
+        UserRole.get_or_create(user=user, role=IsInspector.role)
         await message.answer("Роль инспектора добавлена")
     await state.clear()
