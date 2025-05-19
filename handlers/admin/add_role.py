@@ -28,7 +28,7 @@ async def add_role(
     if not user:
         await message.answer("Такой сотрудник не запускал бота")
         await state.clear()
-        return
+        return None, user
 
     if contact.phone_number and user.phone != contact.phone_number:
         user.phone = contact.phone_number
@@ -52,12 +52,15 @@ async def add_role(
 async def get_admin_contact(message: Message, state: FSMContext):
     """Обработчик получения контакта администратора"""
     contact: Contact = message.contact
-    user_role, user = add_role(
+    user_role, user = await add_role(
         message=message,
         state=state,
         contact=contact,
         role=IsAdmin.role,
     )
+    if not user:
+        return
+
     if user_role:
         await message.answer(
             "Этому сотруднику уже выдавалась роль администратора")
@@ -81,19 +84,22 @@ async def add_inspector_start(message: Message, state: FSMContext):
 async def get_inspector_contact(message: Message, state: FSMContext):
     """Обработчик получения контакта инспектора"""
     contact: Contact = message.contact
-    user_role, user = add_role(
+    user_role, user = await add_role(
         message=message,
         state=state,
         contact=contact,
         role=IsInspector.role,
     )
+    if not user:
+        return
+
     if user_role:
         await message.answer(
-            "Этому сотруднику уже выдавалась роль администратора")
+            "Этому сотруднику уже выдавалась роль инспектора")
     else:
-        UserRole.create(
+        UserRole.get_or_create(
             user=user,
             role=IsInspector.role
         )
-        await message.answer("Роль администратора добавлена")
+        await message.answer("Роль инспектора добавлена")
     await state.clear()
