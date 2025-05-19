@@ -1,3 +1,4 @@
+"""Клавиатуры для Администратора"""
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 KB = ReplyKeyboardMarkup(
     keyboard=[
