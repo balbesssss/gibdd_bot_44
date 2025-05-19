@@ -7,6 +7,7 @@ from states.admin.inspector import AddInspector
 from filters.admin import IsAdmin
 from filters.inspector import IsInspector
 from database.models import User, UserRole
+
 router = Router()
 
 
@@ -44,8 +45,7 @@ async def get_inspector_contact(message: Message, state: FSMContext):
     inspector_role = IsInspector.role
 
     user_role = UserRole.get_or_none(
-        (UserRole.user == user) &
-        (UserRole.role == inspector_role)
+        (UserRole.user == user) & (UserRole.role == inspector_role)
     )
 
     if user_role:
