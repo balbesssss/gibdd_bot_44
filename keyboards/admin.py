@@ -1,6 +1,9 @@
 """Клавиатуры для Администратора"""
 
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import (
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
 
 
 ADMIN_KEYBOARD = [
