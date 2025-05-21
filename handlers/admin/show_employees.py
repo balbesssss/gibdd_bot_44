@@ -1,4 +1,5 @@
 """Список инспекторов"""
+
 from aiogram import Router, F
 from aiogram.types import Message
 from database.models import User, UserRole
@@ -10,8 +11,8 @@ router = Router()
 @router.message(F.text == "Показать инспекторов")
 async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
-    inspectors = User.select().join(UserRole).where(
-        UserRole.role == IsInspector.role
+    inspectors = (
+        User.select().join(UserRole).where(UserRole.role == IsInspector.role)
     )
     if not inspectors:
         await message.answer("Список инспекторов пуст.")
@@ -24,13 +25,11 @@ async def show_inspectors(message: Message):
         if inspector.username:
             inspector_entry = (
                 f'{i}. <a href="https://t.me/{inspector.username}">'
-                f'{full_name}</a>'
+                f"{full_name}</a>"
             )
         else:
             inspector_entry = f"{i}. {full_name}"
         inspectors_list += inspector_entry + "\n"
     await message.answer(
-        inspectors_list,
-        parse_mode="HTML",
-        disable_web_page_preview=True
+        inspectors_list, parse_mode="HTML", disable_web_page_preview=True
     )
