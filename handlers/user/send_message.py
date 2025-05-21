@@ -13,6 +13,10 @@ router = Router()
 async def get_message_from_user(message: Message):
     """Обработчик сообщения от пользователя"""
 
+    await message.answer(
+        "Спасибо за обращение. Мы его уже передали инспекторам"
+    )
+
     user_roles = list(UserRole.select().where(
         UserRole.role == IsInspector().role))
 
@@ -20,7 +24,4 @@ async def get_message_from_user(message: Message):
         await message.bot.send_message(
             chat_id=user_role.user.tg_id,
             text=message.text
-        )
-    await message.answer(
-        "Спасибо за обращение. Мы его уже передали инспекторам"
         )
