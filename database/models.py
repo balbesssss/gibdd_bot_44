@@ -61,7 +61,7 @@ if __name__ == "__main__":
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
     Role.get_or_create(name="Инспектор")
-    admin, _ = User.get_or_create(tg_id=320720102)
+    admin, _ = User.get_or_create(tg_id=6386266815)
     UserRole.get_or_create(
         user=admin,
         role=admin_role,
