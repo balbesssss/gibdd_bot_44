@@ -23,5 +23,5 @@ async def get_message_from_user(message: Message):
         await message.bot.send_message(
             chat_id=user_role.user.tg_id,
             text=message.text,
-            reply_markup=user_ban_kb(message.from_user.id)
+            reply_markup=user_ban_kb(message.from_user.id),
         )
