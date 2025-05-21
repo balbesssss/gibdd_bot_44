@@ -1,6 +1,11 @@
 """Клавиатура Инспектора"""
 
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+    )
 
 from database.models import User, Patrol
 
@@ -28,6 +33,7 @@ def get_kb_by_user(user: User):
     return ReplyKeyboardMarkup(
         keyboard=get_keyboard_by_user(user),
         resize_keyboard=True,
+    )
 
 
 def user_ban_cobfirm_and_cancel_kb(user_id: int):
