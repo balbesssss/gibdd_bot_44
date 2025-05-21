@@ -60,7 +60,7 @@ class Patrol(Table):
 
     inspector = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     start = DateTimeField(default=datetime.now())
-    end = DateTimeField(null = True)
+    end = DateTimeField(null=True)
 
 
 if __name__ == "__main__":
