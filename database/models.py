@@ -59,7 +59,8 @@ class Patrol(Table):
     """Класс для сообщения о выезде инспектора"""
 
     inspector = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
-    at_created = DateTimeField(default=datetime.now())
+    patrol_start = DateTimeField(default=datetime.now())
+    patrol_end = DateTimeField(None == True)
 
 
 if __name__ == "__main__":
