@@ -14,4 +14,4 @@ async def show_inspectors(callback: CallbackQuery):
     user_id = callback.data.split("_")[1]
     await callback.message.edit_reply_markup(
         reply_markup=user_ban_cobfirm_and_cancel_kb(user_id)
-        )
+    )
