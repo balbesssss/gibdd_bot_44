@@ -16,14 +16,12 @@ async def show_inspectors(callback: CallbackQuery):
     await callback.message.edit_reply_markup(
         reply_markup=user_ban_cobfirm_and_cancel_kb(user_id)
     )
-    await callback.message.answer(f"{user_id}")
 
 
 @router.callback_query(F.data.startswith("user_ban_confirm_"), IsInspector())
 async def blocking_user(callback: CallbackQuery):
     """Отмена блокирования пользователя."""
     user_id = callback.data.split("_")[3]
-    await callback.message.answer(f"{user_id}")
     user = User.get_or_none(User.tg_id == user_id)
     message_list = list(
         Message.select().where(Message.user == user)
