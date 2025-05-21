@@ -15,6 +15,9 @@ class IsUser(BaseFilter):
         if user is None:
             return False
 
+        if self.role is None:
+            return True
+
         user_role = UserRole.get_or_none(
             user=User.get(tg_id=message.from_user.id), role=self.role
         )
