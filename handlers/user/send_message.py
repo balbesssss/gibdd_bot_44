@@ -2,11 +2,10 @@
 
 from aiogram import Router
 from aiogram.types import Message
-from database.models import UserRole
 from filters.user import IsUser
 from filters.inspector import IsInspector
 from keyboards.inspector import user_ban_kb
-from database.models import Message as MessageModel
+from database.models import UserRole, Message as MessageModel
 
 router = Router()
 
