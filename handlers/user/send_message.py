@@ -6,6 +6,7 @@ from database.models import UserRole
 from filters.user import IsUser
 from filters.inspector import IsInspector
 from keyboards.inspector import user_ban_kb
+from database.models import Message as MessageModel
 
 router = Router()
 
@@ -19,9 +20,17 @@ async def get_message_from_user(message: Message):
     user_roles = list(
         UserRole.select().where(UserRole.role == IsInspector().role)
     )
+
     for user_role in user_roles:
-        await message.bot.send_message(
+        message = await message.bot.send_message(
             chat_id=user_role.user.tg_id,
             text=message.text,
-            reply_markup=user_ban_kb(message.from_user.id)
+            reply_markup=user_ban_kb(message.from_user.id),
+        )
+
+        MessageModel.get_or_create(
+            user_id=user_role.user.id,
+            text=message.text,
+            tg_message_id=message.message_id,
+            at_created=message.date,
         )
