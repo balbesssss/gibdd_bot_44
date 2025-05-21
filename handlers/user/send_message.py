@@ -5,14 +5,13 @@ from aiogram.types import Message
 from database.models import UserRole
 from filters.user import IsUser
 from filters.inspector import IsInspector
-from keyboards.user import MESSAGE_USER
+from keyboards.inspector import MESSAGE_USER
 
 router = Router()
 
 
 @router.message(IsUser())
 async def get_message_from_user(message: Message):
-
     """Обработчик сообщения от пользователя"""
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам"
