@@ -55,10 +55,10 @@ class Message(Table):
     at_created = DateTimeField(default=datetime.now())
 
 
-class Patrols(Table):
+class Patrol(Table):
     """Класс для сообщения о выезде инспектора"""
 
-    user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
+    inspector = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     at_created = DateTimeField(default=datetime.now())
 
 
