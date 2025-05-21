@@ -5,7 +5,7 @@ from aiogram.types import Message
 from database.models import UserRole
 from filters.user import IsUser
 from filters.inspector import IsInspector
-from keyboards.inspector import MESSAGE_USER
+from keyboards.inspector import unban_user
 
 router = Router()
 
@@ -23,5 +23,5 @@ async def get_message_from_user(message: Message):
         await message.bot.send_message(
             chat_id=user_role.user.tg_id,
             text=message.text,
-            reply_markup=MESSAGE_USER
+            reply_markup=unban_user(message.from_user.id)
         )
