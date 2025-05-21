@@ -8,6 +8,7 @@ router = Router()
 
 @router.message(F.text == "Показать инспекторов")
 async def show_inspectors(message: Message):
+    """Отображает список инспекторов администратору."""
     inspector_role = Role.get(name="Инспектор")
     inspectors = User.select().join(UserRole).where(
         UserRole.role == inspector_role
