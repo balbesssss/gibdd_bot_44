@@ -55,9 +55,16 @@ class Message(Table):
     at_created = DateTimeField(default=datetime.now())
 
 
+class Patrols(Table):
+    """Класс для сообщения о выезде инспектора"""
+
+    user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
+    at_created = DateTimeField(default=datetime.now())
+
+
 if __name__ == "__main__":
     DB.connect()
-    DB.create_tables([User, Role, UserRole, Message], safe=True)
+    DB.create_tables([User, Role, UserRole, Message, Patrols], safe=True)
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
     Role.get_or_create(name="Инспектор")
