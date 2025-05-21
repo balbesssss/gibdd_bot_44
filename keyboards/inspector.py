@@ -3,7 +3,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def ban_user(user_id: int):
+def user_ban_cobfirm_and_cancel_kb(user_id: int):
     """Подтвердение блокирования пользователя"""
     return InlineKeyboardMarkup(
         inline_keyboard=[[
@@ -18,7 +18,7 @@ def ban_user(user_id: int):
         ]])
 
 
-def unban_user(user_id: int):
+def user_ban_kb(user_id: int):
     """Блокирование пользователя"""
     return InlineKeyboardMarkup(
         inline_keyboard=[[
