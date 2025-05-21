@@ -1,6 +1,16 @@
 """Клавиатуры для Администратора"""
 
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import (
+    KeyboardButton, ReplyKeyboardMarkup,
+    InlineKeyboardButton, InlineKeyboardMarkup
+    )
+
+USER_BAN = InlineKeyboardMarkup(
+    inline_keyboard=[[
+        InlineKeyboardButton(text="Подтвердить", callback_data='Confirm'),
+        InlineKeyboardButton(text="Отменить", callback_data='Cancel'),
+    ]])
+
 
 KB = ReplyKeyboardMarkup(
     keyboard=[
