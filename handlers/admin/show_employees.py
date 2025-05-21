@@ -3,12 +3,13 @@
 from aiogram import Router, F
 from aiogram.types import Message
 from database.models import User, UserRole
+from filters.admin import IsAdmin
 from filters.inspector import IsInspector
 
 router = Router()
 
 
-@router.message(F.text == "Показать инспекторов")
+@router.message(F.text == "Показать инспекторов", IsAdmin())
 async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
     inspectors = (
