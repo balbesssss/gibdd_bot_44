@@ -26,6 +26,7 @@ async def get_message_from_user(message: Message):
             chat_id=user_role.user.tg_id,
             text=message.text,
             reply_markup=user_ban_kb(message.from_user.id),
+
         )
 
         MessageModel.get_or_create(
@@ -34,3 +35,4 @@ async def get_message_from_user(message: Message):
             tg_message_id=message.message_id,
             at_created=message.date,
         )
+       
