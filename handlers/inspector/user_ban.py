@@ -20,7 +20,7 @@ async def show_inspectors(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith("user_ban_confirm_"), IsInspector())
 async def blocking_user(callback: CallbackQuery):
-    """Отмена блокирования пользователя."""
+    """блокирования пользователя."""
     user_id = callback.data.split("_")[3]
     user = User.get_or_none(User.tg_id == user_id)
     message_list = list(
@@ -38,7 +38,7 @@ async def blocking_user(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith("user_ban_cancel_"), IsInspector())
 async def unblocking_user(callback: CallbackQuery):
-    """Разблокировка пользователя."""
+    """Отмена блокировки пользователя."""
     await callback.message.edit_reply_markup(
         reply_markup=False
     )
