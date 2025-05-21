@@ -64,7 +64,7 @@ class Patrol(Table):
 
 if __name__ == "__main__":
     DB.connect()
-    DB.create_tables([User, Role, UserRole, Message, Patrols], safe=True)
+    DB.create_tables([User, Role, UserRole, Message, Patrol], safe=True)
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
     Role.get_or_create(name="Инспектор")
