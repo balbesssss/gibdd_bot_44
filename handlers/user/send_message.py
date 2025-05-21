@@ -35,4 +35,3 @@ async def get_message_from_user(message: Message):
             tg_message_id=message.message_id,
             at_created=message.date,
         )
-       
