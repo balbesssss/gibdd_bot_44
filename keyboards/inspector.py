@@ -9,7 +9,7 @@ def ban_user(user_id: int):
         inline_keyboard=[[
             InlineKeyboardButton(
                 text="Подтвердить",
-                callback_data=f'user_ban_confirm{user_id}'
+                callback_data=f'user_ban_confirm_{user_id}'
                 ),
             InlineKeyboardButton(
                 text="Отменить",
