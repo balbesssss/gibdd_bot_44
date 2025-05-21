@@ -2,16 +2,19 @@
 
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
-KB = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Добавить инспектора"),
-            KeyboardButton(text="Показать инспекторов"),
-        ],
-        [
-            KeyboardButton(text="Добавить администратора"),
-            KeyboardButton(text="Показать администраторов"),
-        ],
+
+ADMIN_KEYBOARD = [
+    [
+        KeyboardButton(text="Добавить инспектора"),
+        KeyboardButton(text="Показать инспекторов"),
     ],
+    [
+        KeyboardButton(text="Добавить администратора"),
+        KeyboardButton(text="Показать администраторов"),
+    ],
+]
+
+KB = ReplyKeyboardMarkup(
+    keyboard=ADMIN_KEYBOARD,
     resize_keyboard=True,
 )
