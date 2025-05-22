@@ -1,6 +1,5 @@
 """Забинить пользователя"""
-from aiogram import exceptions
-from aiogram import Router, F
+from aiogram import Router, F, exceptions
 from aiogram.types import CallbackQuery
 from filters.inspector import IsInspector
 from keyboards.inspector import user_ban_cobfirm_and_cancel_kb
