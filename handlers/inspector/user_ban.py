@@ -1,11 +1,12 @@
 """Забинить пользователя"""
-import aiogram.exceptions as exeptions
+import aiogram.exceptions as exceptions
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from filters.inspector import IsInspector
 from keyboards.inspector import user_ban_cobfirm_and_cancel_kb
 from database.models import Message, User, UserRole
 from filters.admin import IsAdmin
+
 router = Router()
 
 
@@ -50,7 +51,7 @@ async def blocking_user(callback: CallbackQuery):
                     message_id=message.tg_message_id
                 )
             message.delete_instance()
-        except exeptions.TelegramBadRequest:
+        except exceptions.TelegramBadRequest:
             pass
 
     user_to_block.is_ban = True
