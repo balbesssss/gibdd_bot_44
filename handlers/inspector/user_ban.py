@@ -1,5 +1,5 @@
 """Забинить пользователя"""
-import aiogram.exceptions as exceptions
+from aiogram import exceptions
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from filters.inspector import IsInspector
