@@ -4,8 +4,8 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     InlineKeyboardButton,
-    InlineKeyboardMarkup
-    )
+    InlineKeyboardMarkup,
+)
 
 from database.models import User, Patrol
 
@@ -14,14 +14,16 @@ def get_keyboard_by_user(user: User):
     """Получение списка кнопок"""
 
     is_patrol = Patrol.get_or_none(
-        (Patrol.inspector == user) &
-        (Patrol.end.is_null())
+        (Patrol.inspector == user) & (Patrol.end.is_null())
     )
     return [
         [
             KeyboardButton(
-                text="Закончить патрулирование" if is_patrol
-                else "Начать патрулирование"
+                text=(
+                    "Закончить патрулирование"
+                    if is_patrol
+                    else "Начать патрулирование"
+                )
             )
         ]
     ]
