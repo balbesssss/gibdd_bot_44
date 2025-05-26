@@ -52,10 +52,16 @@ class UserRole(Table):
 class Message(Table):
     """Класс сообщений пользователя"""
 
-    user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
+    to_inspector = ForeignKeyField(
+        User,
+        on_update="CASCADE",
+        on_delete="CASCADE"
+    )
+    from_user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     text = CharField(max_length=4096)
     at_created = DateTimeField(default=datetime.now())
     tg_message_id = IntegerField()
+    is_delete = BooleanField(default=False)
 
 
 class Patrol(Table):
