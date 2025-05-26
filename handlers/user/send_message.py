@@ -17,7 +17,7 @@ async def get_message_from_user(message: Message):
         "Спасибо за обращение. Мы его уже передали инспекторам"
     )
     user_roles = list(
-        UserRole.select().where(UserRole.role == IsInspector().role)
+        UserRole.select().where(UserRole.role == IsInspector.role)
     )
     user = User.get_or_none(User.tg_id == message.from_user.id)
     for user_role in user_roles:

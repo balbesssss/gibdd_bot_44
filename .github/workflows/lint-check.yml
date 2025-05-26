@@ -1,4 +1,3 @@
-# .github/workflows/lint-check.yml
 name: Lint Check
 
 on:

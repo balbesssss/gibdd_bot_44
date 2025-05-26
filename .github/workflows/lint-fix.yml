@@ -1,4 +1,3 @@
-# .github/workflows/lint-fix.yml
 name: Auto Format and Fix
 
 on:
