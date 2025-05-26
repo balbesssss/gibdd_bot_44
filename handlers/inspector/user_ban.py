@@ -77,7 +77,8 @@ async def blocking_user(callback: CallbackQuery):
         )
 
 
-@router.callback_query(F.data.startswith("user_ban_cancel"), IsInspector())
+@router.callback_query(F.data.startswith("user_ban_cancel_"), IsInspector())
 async def unblocking_user(callback: CallbackQuery):
     """Отмена блокировки пользователя."""
-    await callback.message.edit_reply_markup(reply_markup=user_ban_kb)
+    user_id = callback.data.split("_")[-1]
+    await callback.message.edit_reply_markup(reply_markup=user_ban_kb(user_id))
