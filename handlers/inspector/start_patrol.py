@@ -27,5 +27,5 @@ async def start_patrol(message: Message):
         await message.answer(
             "Патрулирование начато, "
             "теперь Вы будете получать сообщения от граждан",
-        reply_markup=get_kb_by_user(inspector),
+            reply_markup=get_kb_by_user(inspector),
             )
