@@ -5,7 +5,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 from filters.inspector import IsInspector
 from keyboards.common import get_kb_by_user
-import handlers.inspector.common as c
+from handlers.inspector.common import get_active_patrol
 
 
 router = Router()
@@ -14,7 +14,7 @@ router = Router()
 @router.message(F.text == 'Закончить патрулирование', IsInspector())
 async def end_patrol(message: Message):
     """Обработчик кнопки завершения патруля"""
-    inspector, is_patrol = c.get_active_patrol(message.from_user.id)
+    inspector, is_patrol = get_active_patrol(message.from_user.id)
     if is_patrol:
         is_patrol.end = datetime.now()
         is_patrol.save()

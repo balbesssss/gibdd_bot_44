@@ -10,4 +10,4 @@ def get_active_patrol(user_id):
         (Patrol.inspector == inspector) &
         (Patrol.end.is_null())
         )
-    return [inspector, is_patrol]
+    return inspector, is_patrol
