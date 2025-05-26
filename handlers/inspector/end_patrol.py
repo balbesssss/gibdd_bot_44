@@ -3,9 +3,9 @@
 from datetime import datetime
 from aiogram import Router, F
 from aiogram.types import Message
-from database.models import Patrol, User
 from filters.inspector import IsInspector
 from keyboards.common import get_kb_by_user
+import handlers.inspector.common as c
 
 
 router = Router()
@@ -14,11 +14,7 @@ router = Router()
 @router.message(F.text == 'Закончить патрулирование', IsInspector())
 async def end_patrol(message: Message):
     """Обработчик кнопки завершения патруля"""
-    inspector = User.get(tg_id=message.from_user.id)
-    is_patrol = Patrol.get_or_none(
-        (Patrol.inspector == inspector) &
-        (Patrol.end.is_null())
-        )
+    inspector, is_patrol = c.get_active_patrol(message.from_user.id)
     if is_patrol:
         is_patrol.end = datetime.now()
         is_patrol.save()
