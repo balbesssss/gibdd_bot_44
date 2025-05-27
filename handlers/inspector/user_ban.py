@@ -39,7 +39,7 @@ async def blocking_user(callback: CallbackQuery):
     message_list = list(
         Message.select().where(Message.from_user == user_to_block)
     )
-    
+
     for message in message_list:
         try:
             await callback.bot.delete_message(
@@ -48,7 +48,11 @@ async def blocking_user(callback: CallbackQuery):
                 )
         except exceptions.TelegramBadRequest:
             print(f"Сообщение {message.tg_message_id} не найдено")
-    Message.update(is_delete=True).where(Message.tg_message_id.in_(message_list)).execute()
+    Message.update(
+        is_delete=True
+    ).where(
+        Message.tg_message_id.in_(message_list)
+    ).execute()
 
     admins = User.select().join(UserRole).where(UserRole.role == IsAdmin.role)
     inspector = User.get(User.tg_id == callback.from_user.id)
