@@ -17,21 +17,23 @@ async def get_message_from_user(message: Message):
         "Спасибо за обращение. Мы его уже передали инспекторам"
     )
     user = User.get_or_none(User.tg_id == message.from_user.id)
-    if user and not user.is_ban:
-        user_roles = list(
-            UserRole.select().where(UserRole.role == IsInspector.role)
+    if not user or user.is_ban:
+        return
+
+    user_roles = list(
+        UserRole.select().where(UserRole.role == IsInspector.role)
+    )
+    for user_role in user_roles:
+        message = await message.bot.send_message(
+            chat_id=user_role.user.tg_id,
+            text=message.text,
+            reply_markup=user_ban_kb(message.from_user.id),
+
         )
-        for user_role in user_roles:
-            message = await message.bot.send_message(
-                chat_id=user_role.user.tg_id,
-                text=message.text,
-                reply_markup=user_ban_kb(message.from_user.id),
 
-            )
-
-            MessageModel.get_or_create(
-                to_inspector=user_role.user.id,
-                from_user=user.id,
-                text=message.text,
-                tg_message_id=message.message_id,
-            )
+        MessageModel.get_or_create(
+            to_inspector=user_role.user.id,
+            from_user=user.id,
+            text=message.text,
+            tg_message_id=message.message_id,
+        )

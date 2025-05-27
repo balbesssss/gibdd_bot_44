@@ -1,6 +1,6 @@
 """Забинить пользователя"""
 from aiogram import exceptions
-
+from asyncio import sleep
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 
@@ -11,7 +11,6 @@ from keyboards.inspector import (
     user_ban_kb
 )
 from database.models import Message, User, UserRole
-from core.users.models import User as UserModels
 
 
 router = Router()
@@ -30,29 +29,18 @@ async def show_inspectors(callback: CallbackQuery):
 async def blocking_user(callback: CallbackQuery):
     """Блокировка пользователя."""
     user_id = callback.data.split("_")[-1]
-    inspector = User.get(User.tg_id == callback.from_user.id)
     user_to_block = User.get(User.tg_id == user_id)
 
-    if user_to_block is None:
-        await callback.answer("Пользователь не найден.")
+    if user_to_block.is_ban:
+        await callback.answer("Пользователь заблокирован.")
         return
+
+    user_to_block.is_ban = True
+    user_to_block.save()
 
     message_list = list(
         Message.select().where(Message.from_user == user_to_block)
     )
-
-    full_name_inspector = UserModels(
-        inspector.first_name,
-        inspector.last_name
-    ).full_name
-
-    full_name_user = UserModels(
-        user_to_block.first_name,
-        user_to_block.last_name
-    ).full_name
-
-    admins = User.select().join(UserRole).where(UserRole.role == IsAdmin.role)
-
     for message in message_list:
         try:
             await callback.bot.delete_message(
@@ -62,17 +50,17 @@ async def blocking_user(callback: CallbackQuery):
             message.is_delete = True
             message.save()
         except exceptions.TelegramBadRequest:
-            pass
+            print(f"Сообщение {message.tg_message_id} не найдено")
 
-    user_to_block.is_ban = True
-    user_to_block.save()
-
+    admins = User.select().join(UserRole).where(UserRole.role == IsAdmin.role)
+    inspector = User.get(User.tg_id == callback.from_user.id)
     for admin in admins:
+        await sleep(0.5)
         await callback.bot.send_message(
             chat_id=admin.tg_id,
             text=(
-                f"Пользователь {full_name_user} "
-                f"заблокирован инспектором {full_name_inspector}"
+                f"Пользователь {user_to_block.full_name} "
+                f"заблокирован инспектором {inspector.full_name}"
             )
         )
 

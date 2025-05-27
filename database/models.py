@@ -35,6 +35,11 @@ class User(Table):
     phone = IntegerField(null=True)
     is_ban = BooleanField(default=False)
 
+    @property
+    def full_name(self):
+        """Возвращает полное имя пользователя."""
+        return f"{self.first_name or ''} {self.last_name or ''}".strip()
+
 
 class Role(Table):
     """Класс ролей"""
