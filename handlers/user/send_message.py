@@ -17,7 +17,7 @@ async def get_message_from_user(message: Message):
         "Спасибо за обращение. Мы его уже передали инспекторам"
     )
     user = User.get(User.tg_id == message.from_user.id)
-    if not user or user.is_ban:
+    if user.is_ban:
         return
 
     user_roles = list(
