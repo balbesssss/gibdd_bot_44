@@ -1,9 +1,8 @@
 """Забинить пользователя"""
-from aiogram import exceptions
 from asyncio import sleep
+from aiogram import exceptions
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
-
 from filters.inspector import IsInspector
 from filters.admin import IsAdmin
 from keyboards.inspector import (
@@ -11,7 +10,6 @@ from keyboards.inspector import (
     user_ban_kb
 )
 from database.models import Message, User, UserRole
-
 
 router = Router()
 
