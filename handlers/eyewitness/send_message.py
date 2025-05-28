@@ -10,7 +10,7 @@ from handlers.eyewitness.common import send_message_to_employees
 router = Router()
 
 
-@router.message(F.text, ~F.text.startswith("/"), IsUser())
+@router.message(~F.text.startswith("/") >> F.text, IsUser())
 async def get_message_from_user(message: Message):
     """Обработчик сообщения от пользователя"""
 
