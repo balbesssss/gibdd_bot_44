@@ -9,6 +9,7 @@ from database.models import (
     UserRole,
     Photo,
     Patrol,
+    Location,
     Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
@@ -20,6 +21,20 @@ async def send_message_to_employ(message: Message, employ: User):
     """Переслать сообщение очевидца конкретному сотруднику"""
 
     eyewitness: User = User.get(tg_id=message.from_user.id)
+
+    if eyewitness.is_ban:
+        # Удаляем все предыдущие сообщения от забаненного пользователя
+        messages_to_delete = MessageM.select().where(
+            (MessageM.from_user == eyewitness) 
+               & (MessageM.to_user == employ)
+            )
+        for msg in messages_to_delete:
+            try:
+                await message.bot.delete_message(chat_id=employ.tg_id, message_id=msg.tg_message_id)
+            except:
+                pass
+            msg.delete_instance()
+        return
 
     last_message: MessageM = (
         MessageM.select()
@@ -51,8 +66,27 @@ async def send_message_to_employ(message: Message, employ: User):
             await send_message_to_employ(message, employ)
             return
 
-    if message.text:
+    if message.location:
+        send_message = await message.bot.send_location(
+            chat_id=employ.tg_id,
+            latitude=message.location.latitude,
+            longitude=message.location.longitude,
+            reply_to_message_id=last_message.tg_message_id if last_message else None
+            )
 
+        loc_message = MessageM.create(
+        to_user=employ,
+        from_user=eyewitness,
+        text="Геолокация",
+        tg_message_id=send_message.message_id)
+
+        Location.get_or_create(
+            message=loc_message,
+            point = f"Геоточка({message.location.longitude} {message.location.latitude})"
+        )
+        return
+
+    if message.text:
         msg = await message.bot.send_message(
             chat_id=employ.tg_id,
             text=message.text,
