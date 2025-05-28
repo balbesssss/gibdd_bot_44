@@ -23,13 +23,15 @@ def get_keyboard_by_user(user: User):
     """Кнопки для клавиатуры администратора"""
 
     admin: Admin = Admin.get_or_none(user=user)
-    keyboard = ADMIN_KEYBOARD + [[
-        (
-            KeyboardButton(text="Не получать сообщения очевидцев")
-            if admin and admin.is_notify
-            else KeyboardButton(text="Получать соощения очевидцев")
-        )
-    ]]
+    keyboard = ADMIN_KEYBOARD + [
+        [
+            (
+                KeyboardButton(text="Не получать сообщения очевидцев")
+                if admin and admin.is_notify
+                else KeyboardButton(text="Получать соощения очевидцев")
+            )
+        ]
+    ]
     return keyboard
 
 

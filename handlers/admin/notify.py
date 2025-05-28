@@ -19,16 +19,16 @@ async def enable_notifications(message: Message):
 
     if admin.is_notify:
         await message.answer(
-            text='Ранее Вы уже включили получение сообщений от очевидцев',
-            reply_markup=get_kb_by_user(user)
+            text="Ранее Вы уже включили получение сообщений от очевидцев",
+            reply_markup=get_kb_by_user(user),
         )
         return
 
     admin.is_notify = True
     admin.save()
     await message.answer(
-        text='Теперь Вы будете получать сообщения от очевидцев',
-        reply_markup=get_kb_by_user(user)
+        text="Теперь Вы будете получать сообщения от очевидцев",
+        reply_markup=get_kb_by_user(user),
     )
 
 
@@ -42,14 +42,14 @@ async def disable_notifications(message: Message):
 
     if not admin.is_notify:
         await message.answer(
-            text='Ранее Вы Уже выключили получение сообщений от очевидцев',
-            reply_markup=get_kb_by_user(user)
+            text="Ранее Вы Уже выключили получение сообщений от очевидцев",
+            reply_markup=get_kb_by_user(user),
         )
         return
 
     admin.is_notify = False
     admin.save()
     await message.answer(
-        text='Теперь Вы не будете получать сообщения от очевидцев',
-        reply_markup=get_kb_by_user(user)
+        text="Теперь Вы не будете получать сообщения от очевидцев",
+        reply_markup=get_kb_by_user(user),
     )
