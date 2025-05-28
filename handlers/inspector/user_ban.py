@@ -1,14 +1,12 @@
 """Забинить пользователя"""
+
 from asyncio import sleep
 from aiogram import exceptions
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from filters.inspector import IsInspector
 from filters.admin import IsAdmin
-from keyboards.inspector import (
-    user_ban_cobfirm_and_cancel_kb,
-    user_ban_kb
-)
+from keyboards.inspector import user_ban_cobfirm_and_cancel_kb, user_ban_kb
 from database.models import Message, User, UserRole
 
 router = Router()
@@ -43,14 +41,12 @@ async def blocking_user(callback: CallbackQuery):
     for message in message_list:
         try:
             await callback.bot.delete_message(
-                    chat_id=message.to_inspector.tg_id,
-                    message_id=message.tg_message_id
-                )
+                chat_id=message.to_inspector.tg_id,
+                message_id=message.tg_message_id,
+            )
         except exceptions.TelegramBadRequest:
             print(f"Сообщение {message.tg_message_id} не найдено")
-    Message.update(
-        is_delete=True
-    ).where(
+    Message.update(is_delete=True).where(
         Message.tg_message_id.in_(message_list)
     ).execute()
 
@@ -62,7 +58,7 @@ async def blocking_user(callback: CallbackQuery):
             text=(
                 f"Пользователь {user_to_block.full_name} "
                 f"заблокирован инспектором {inspector.full_name}"
-            )
+            ),
         )
         await sleep(0.5)
 

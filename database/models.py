@@ -58,9 +58,7 @@ class Message(Table):
     """Класс сообщений пользователя"""
 
     to_inspector = ForeignKeyField(
-        User,
-        on_update="CASCADE",
-        on_delete="CASCADE"
+        User, on_update="CASCADE", on_delete="CASCADE"
     )
     from_user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     text = CharField(max_length=4096)
