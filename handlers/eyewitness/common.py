@@ -9,7 +9,7 @@ from database.models import (
     UserRole,
     Photo,
     Patrol,
-    Message as MessageM
+    Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
 
@@ -22,9 +22,9 @@ async def send_message_to_employ(message: Message, employ: User):
     eyewitness: User = User.get(tg_id=message.from_user.id)
 
     last_message: MessageM = (
-        MessageM.select().where(
-            (MessageM.from_user == eyewitness)
-            & (MessageM.to_user == employ)
+        MessageM.select()
+        .where(
+            (MessageM.from_user == eyewitness) & (MessageM.to_user == employ)
         )
         .order_by(MessageM.id.desc())
         .first()
@@ -32,16 +32,14 @@ async def send_message_to_employ(message: Message, employ: User):
 
     if last_message is None:
         last_message = (
-            MessageM.select().where(
-                (MessageM.from_user == eyewitness)
-            )
+            MessageM.select()
+            .where((MessageM.from_user == eyewitness))
             .order_by(MessageM.id.desc())
             .first()
         )
         if last_message:
             msg: Message = await message.bot.send_message(
-                chat_id=employ.tg_id,
-                text=last_message.text
+                chat_id=employ.tg_id, text=last_message.text
             )
             MessageM.get_or_create(
                 to_user=eyewitness,
@@ -59,8 +57,9 @@ async def send_message_to_employ(message: Message, employ: User):
             chat_id=employ.tg_id,
             text=message.text,
             reply_markup=user_ban_kb(eyewitness.tg_id),
-            reply_to_message_id=last_message.tg_message_id
-            if last_message else None,
+            reply_to_message_id=(
+                last_message.tg_message_id if last_message else None
+            ),
         )
         MessageM.get_or_create(
             from_user=eyewitness,
@@ -77,8 +76,9 @@ async def send_message_to_employ(message: Message, employ: User):
             photo=message.photo[0].file_id,
             caption=message.caption,
             reply_markup=user_ban_kb(eyewitness.tg_id),
-            reply_to_message_id=last_message.tg_message_id
-            if last_message else None,
+            reply_to_message_id=(
+                last_message.tg_message_id if last_message else None
+            ),
         )
 
         message_m, _ = MessageM.get_or_create(
@@ -108,10 +108,7 @@ async def send_message_to_employees(message: Message):
         User.select()
         .join(UserRole, on=UserRole.user == User.id)
         .join(Patrol, on=Patrol.inspector == User.id)
-        .where(
-            (UserRole.role == IsInspector.role) &
-            (Patrol.end.is_null())
-        )
+        .where((UserRole.role == IsInspector.role) & (Patrol.end.is_null()))
     )
     for inspector in inspectors:
         await send_message_to_employ(message, inspector)

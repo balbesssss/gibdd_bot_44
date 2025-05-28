@@ -57,9 +57,7 @@ class UserRole(Table):
 class Message(Table):
     """Класс сообщений пользователя"""
 
-    to_user = ForeignKeyField(
-        User, on_update="CASCADE", on_delete="CASCADE"
-    )
+    to_user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     from_user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     text = CharField(max_length=4096, null=True)
     at_created = DateTimeField(default=datetime.now())
@@ -69,10 +67,9 @@ class Message(Table):
 
 class Photo(Table):
     """Сведения о фотографии"""
+
     message = ForeignKeyField(
-        Message,
-        on_update="CASCADE",
-        on_delete="CASCADE"
+        Message, on_update="CASCADE", on_delete="CASCADE"
     )
     file_id = CharField(max_length=128)
 
@@ -95,8 +92,7 @@ class Admin(Table):
 if __name__ == "__main__":
     DB.connect()
     DB.create_tables(
-        [User, Role, UserRole, Message, Patrol, Admin, Photo],
-        safe=True
+        [User, Role, UserRole, Message, Patrol, Admin, Photo], safe=True
     )
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
