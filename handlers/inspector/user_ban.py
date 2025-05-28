@@ -41,7 +41,7 @@ async def blocking_user(callback: CallbackQuery):
     for message in message_list:
         try:
             await callback.bot.delete_message(
-                chat_id=message.to_inspector.tg_id,
+                chat_id=message.to_user.tg_id,
                 message_id=message.tg_message_id,
             )
         except exceptions.TelegramBadRequest:
