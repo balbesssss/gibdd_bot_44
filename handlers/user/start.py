@@ -33,7 +33,7 @@ async def cmd_start(message: Message):
         user.save()
 
     await message.answer(
-        "Добрый день.Через этого бота Вы можете "
+        "Добрый день. Через этого бота Вы можете "
         "отправить анонимное сообщение о пьяном водителе.",
         reply_markup=get_kb_by_user(user),
     )
