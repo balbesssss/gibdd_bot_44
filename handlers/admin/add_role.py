@@ -8,7 +8,7 @@ from states.admin.inspector import AddInspector
 from states.admin.admin import AddAdmin
 from filters.admin import IsAdmin
 from filters.inspector import IsInspector
-from database.models import Role, User, UserRole
+from database.models import Role, User, UserRole, Admin
 
 router = Router()
 
@@ -20,15 +20,9 @@ async def add_admin_start(message: Message, state: FSMContext):
     await state.set_state(AddAdmin.get_contact)
 
 
-async def add_role(
-    message: Message, state: FSMContext, contact: Contact, role: Role
-):
+async def add_role(contact: Contact, role: Role):
     """Добавление роли"""
-    user = User.get_or_none(User.tg_id == contact.user_id)
-    if not user:
-        await message.answer("Такой сотрудник не запускал бота")
-        await state.clear()
-        return None, user
+    user = User.get(User.tg_id == contact.user_id)
 
     if contact.phone_number and user.phone != contact.phone_number:
         user.phone = contact.phone_number
@@ -55,13 +49,9 @@ async def get_admin_contact(message: Message, state: FSMContext):
     """Обработчик получения контакта администратора"""
     contact: Contact = message.contact
     user_role, user = await add_role(
-        message=message,
-        state=state,
         contact=contact,
         role=IsAdmin.role,
     )
-    if not user:
-        return
 
     if user_role:
         await message.answer(
@@ -69,6 +59,7 @@ async def get_admin_contact(message: Message, state: FSMContext):
         )
     else:
         UserRole.create(user=user, role=IsAdmin.role)
+        Admin.get_or_create(user=user)
         await message.answer("Роль администратора добавлена")
     await state.clear()
 
@@ -85,8 +76,6 @@ async def get_inspector_contact(message: Message, state: FSMContext):
     """Обработчик получения контакта инспектора"""
     contact: Contact = message.contact
     user_role, user = await add_role(
-        message=message,
-        state=state,
         contact=contact,
         role=IsInspector.role,
     )

@@ -75,9 +75,15 @@ class Patrol(Table):
     end = DateTimeField(null=True)
 
 
+class Admin(Table):
+    """Класс для хранения состояния"""
+    user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
+    is_notify = BooleanField(default=False)
+
+
 if __name__ == "__main__":
     DB.connect()
-    DB.create_tables([User, Role, UserRole, Message, Patrol], safe=True)
+    DB.create_tables([User, Role, UserRole, Message, Patrol, Admin], safe=True)
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
     Role.get_or_create(name="Инспектор")
