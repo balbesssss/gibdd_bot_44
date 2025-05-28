@@ -48,7 +48,7 @@ def user_ban_cobfirm_and_cancel_kb(user_id: int):
                     callback_data=f"user_ban_confirm_{user_id}",
                 ),
                 InlineKeyboardButton(
-                    text="Отменить", callback_data="user_ban_cancel"
+                    text="Отменить", callback_data=f"user_ban_cancel_{user_id}"
                 ),
             ]
         ]
