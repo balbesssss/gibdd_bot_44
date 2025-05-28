@@ -14,20 +14,18 @@ async def enable_notifications(message: Message):
     user: User = User.get(tg_id=message.from_user.id)
     admin = Admin.get_or_none(user=user)
     if not admin:
-        admin = Admin.create(
-            user=user
-        )
+        admin = Admin.create(user=user)
 
     if admin.is_notify:
         await message.answer(
-            text='Ранее Вы уже включили получение сообщений от очевидцев'
+            text="Ранее Вы уже включили получение сообщений от очевидцев"
         )
         return
 
     admin.is_notify = True
     admin.save()
     await message.answer(
-        text='Теперь Вы будете получать сообщения от очевидцев'
+        text="Теперь Вы будете получать сообщения от очевидцев"
     )
 
 
@@ -37,18 +35,16 @@ async def disable_notifications(message: Message):
     user: User = User.get(tg_id=message.from_user.id)
     admin = Admin.get_or_none(user=user)
     if not admin:
-        admin = Admin.create(
-            user=user
-        )
+        admin = Admin.create(user=user)
 
     if not admin.is_notify:
         await message.answer(
-            text='Ранее Вы Уже выключили получение сообщений от очевидцев'
+            text="Ранее Вы Уже выключили получение сообщений от очевидцев"
         )
         return
 
     admin.is_notify = False
     admin.save()
     await message.answer(
-        text='Теперь Вы не будете получать сообщения от очевидцев'
+        text="Теперь Вы не будете получать сообщения от очевидцев"
     )

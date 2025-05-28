@@ -77,6 +77,7 @@ class Patrol(Table):
 
 class Admin(Table):
     """Класс для хранения состояния"""
+
     user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     is_notify = BooleanField(default=False)
 
