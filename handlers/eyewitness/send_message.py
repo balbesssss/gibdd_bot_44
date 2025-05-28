@@ -20,8 +20,10 @@ async def get_message_from_user(message: Message):
 
     # Создаем Inline клавиатуру с кнопкой "Отправить геолокацию"
     builder = InlineKeyboardBuilder()
-    builder.button(text="Отправить геолокацию", callback_data="request_location")
-    
+    builder.button(
+        text="Отправить геолокацию",
+        callback_data="request_location"
+        )
     await message.answer(
         "Если нужно отправить геолокацию, нажмите кнопку ниже:",
         reply_markup=builder.as_markup()
@@ -33,5 +35,6 @@ async def handle_location_request(callback: CallbackQuery):
     """Обработчик кнопки 'Отправить геолокацию'"""
     await callback.answer()
     await callback.message.answer(
-        "Пожалуйста, отправьте вашу геолокацию через меню вложения (скрепка -> Геолокация)."
+        "Пожалуйста, отправьте вашу геолокацию "
+        "через меню вложения (скрепка -> Геолокация)."
         )

@@ -2,6 +2,7 @@
 
 from typing import List
 from aiogram.types import Message
+from aiogram import exceptions
 from filters import IsAdmin, IsInspector
 from database.models import (
     User,
@@ -24,15 +25,19 @@ async def send_message_to_employ(message: Message, employ: User):
 
     if eyewitness.is_ban:
         # Удаляем все предыдущие сообщения от забаненного пользователя
-        messages_to_delete = MessageM.select().where(
-            (MessageM.from_user == eyewitness) 
-               & (MessageM.to_user == employ)
+        messages_to_delete = list(MessageM.select().where(
+            (MessageM.from_user == eyewitness)
+            & (MessageM.to_user == employ)
             )
+        )
         for msg in messages_to_delete:
             try:
-                await message.bot.delete_message(chat_id=employ.tg_id, message_id=msg.tg_message_id)
-            except:
-                pass
+                await message.bot.delete_message(
+                    chat_id=employ.tg_id,
+                    message_id=msg.tg_message_id
+                )
+            except exceptions.TelegramBadRequest as e:
+                print(f"Unexpected error when deleting message: {e}")
             msg.delete_instance()
         return
 
@@ -71,18 +76,20 @@ async def send_message_to_employ(message: Message, employ: User):
             chat_id=employ.tg_id,
             latitude=message.location.latitude,
             longitude=message.location.longitude,
-            reply_to_message_id=last_message.tg_message_id if last_message else None
+            reply_to_message_id=last_message.tg_message_id
+            if last_message else None
             )
 
         loc_message = MessageM.create(
-        to_user=employ,
-        from_user=eyewitness,
-        text="Геолокация",
-        tg_message_id=send_message.message_id)
+            to_user=employ,
+            from_user=eyewitness,
+            text="Геолокация",
+            tg_message_id=send_message.message_id)
 
         Location.get_or_create(
             message=loc_message,
-            point = f"Геоточка({message.location.longitude} {message.location.latitude})"
+            point=f"Геоточка({message.location.longitude}"
+                  f"{message.location.latitude})"
         )
         return
 
