@@ -57,14 +57,24 @@ class UserRole(Table):
 class Message(Table):
     """Класс сообщений пользователя"""
 
-    to_inspector = ForeignKeyField(
+    to_user = ForeignKeyField(
         User, on_update="CASCADE", on_delete="CASCADE"
     )
     from_user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
-    text = CharField(max_length=4096)
+    text = CharField(max_length=4096, null=True)
     at_created = DateTimeField(default=datetime.now())
     tg_message_id = IntegerField()
     is_delete = BooleanField(default=False)
+
+
+class Photo(Table):
+    """Сведения о фотографии"""
+    message = ForeignKeyField(
+        Message,
+        on_update="CASCADE",
+        on_delete="CASCADE"
+    )
+    file_id = CharField(max_length=128)
 
 
 class Patrol(Table):
@@ -76,7 +86,7 @@ class Patrol(Table):
 
 
 class Admin(Table):
-    """Класс для хранения состояния"""
+    """Класс для хранения настроек администратора"""
 
     user = ForeignKeyField(User, on_update="CASCADE", on_delete="CASCADE")
     is_notify = BooleanField(default=False)
@@ -84,7 +94,10 @@ class Admin(Table):
 
 if __name__ == "__main__":
     DB.connect()
-    DB.create_tables([User, Role, UserRole, Message, Patrol, Admin], safe=True)
+    DB.create_tables(
+        [User, Role, UserRole, Message, Patrol, Admin, Photo],
+        safe=True
+    )
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
     Role.get_or_create(name="Инспектор")
