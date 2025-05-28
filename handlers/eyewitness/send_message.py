@@ -2,6 +2,7 @@
 
 from aiogram import Router, F
 from aiogram.types import Message
+from aiogram.filters import Command
 from filters.user import IsUser
 from handlers.eyewitness.common import send_message_to_employees
 
@@ -10,7 +11,7 @@ from handlers.eyewitness.common import send_message_to_employees
 router = Router()
 
 
-@router.message(F.text, IsUser())
+@router.message(F.text, ~Command(), IsUser())
 async def get_message_from_user(message: Message):
     """Обработчик сообщения от пользователя"""
 
