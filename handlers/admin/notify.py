@@ -15,9 +15,7 @@ async def enable_notifications(message: Message):
     user: User = User.get(tg_id=message.from_user.id)
     admin = Admin.get_or_none(user=user)
     if not admin:
-        admin = Admin.create(
-            user=user
-        )
+        admin = Admin.create(user=user)
 
     if admin.is_notify:
         await message.answer(
@@ -40,9 +38,7 @@ async def disable_notifications(message: Message):
     user: User = User.get(tg_id=message.from_user.id)
     admin = Admin.get_or_none(user=user)
     if not admin:
-        admin = Admin.create(
-            user=user
-        )
+        admin = Admin.create(user=user)
 
     if not admin.is_notify:
         await message.answer(
