@@ -80,7 +80,8 @@ class Location(Table):
     message = ForeignKeyField(
         Message, on_update="CASCADE", on_delete="CASCADE"
     )
-    point = CharField(max_length=4096, null=True)
+    longitude = CharField(max_length=20)
+    latitude = CharField(max_length=20)
 
 
 class Patrol(Table):

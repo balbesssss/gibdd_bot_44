@@ -14,7 +14,7 @@ from database.models import (
     Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
-
+from keyboards.user import get_location_request_kb
 # pylint: disable=E1101
 
 
@@ -27,7 +27,6 @@ async def send_message_to_employ(message: Message, employ: User):
         # Удаляем все предыдущие сообщения от забаненного пользователя
         messages_to_delete = list(MessageM.select().where(
             (MessageM.from_user == eyewitness)
-            & (MessageM.to_user == employ)
             )
         )
         for msg in messages_to_delete:
@@ -38,7 +37,8 @@ async def send_message_to_employ(message: Message, employ: User):
                 )
             except exceptions.TelegramBadRequest as e:
                 print(f"Unexpected error when deleting message: {e}")
-            msg.delete_instance()
+            msg.is_delete = True
+            msg.save()
         return
 
     last_message: MessageM = (
@@ -88,8 +88,8 @@ async def send_message_to_employ(message: Message, employ: User):
 
         Location.get_or_create(
             message=loc_message,
-            point=f"Геоточка({message.location.longitude}"
-                  f"{message.location.latitude})"
+            longitude=message.location.longitude,
+            latitude=message.location.latitude
         )
         return
 
@@ -139,7 +139,9 @@ async def send_message_to_employees(message: Message):
 
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам. "
-        "Вы можете отправить фотографии с места происшествия."
+        "Вы можете отправить фотографии с места происшествия. "
+        "Если хотите отправить геолокацию, нажмите кнопку ниже:",
+        reply_markup=get_location_request_kb()
     )
     user = User.get(User.tg_id == message.from_user.id)
     if user.is_ban:
