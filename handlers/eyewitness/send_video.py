@@ -10,7 +10,7 @@ from handlers.eyewitness.common import send_message_to_employees
 router = Router()
 
 
-@router.message(F.video, IsUser())
+@router.message((F.video | F.animation), IsUser())
 async def get_video_from_user(message: Message):
     """Обработчик видео от пользователя"""
 
