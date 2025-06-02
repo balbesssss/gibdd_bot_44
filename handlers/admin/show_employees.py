@@ -17,7 +17,7 @@ async def show_inspectors(message: Message):
         User.select().join(UserRole).where(UserRole.role == IsInspector.role)
     )
     keyboard = get_kb_by_show_employees(
-        role=IsInspector.role,
+        role=inspectors,
         page=1
     )
 
