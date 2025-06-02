@@ -32,7 +32,6 @@ class User(Table):
     username = CharField(null=True)
     last_name = CharField(null=True)
     first_name = CharField(null=True)
-    phone = IntegerField(null=True)
     is_ban = BooleanField(default=False)
 
     @property
@@ -82,6 +81,14 @@ class Location(Table):
     )
     longitude = CharField(max_length=20)
     latitude = CharField(max_length=20)
+    
+  class Video(Table):
+    """Сведения о видео"""
+
+    message = ForeignKeyField(
+        Message, on_update="CASCADE", on_delete="CASCADE"
+    )
+    file_id = CharField(max_length=128)
 
 
 class Patrol(Table):
