@@ -13,15 +13,12 @@ router = Router()
 @router.message(F.text == "Показать инспекторов", IsAdmin())
 async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
-    keyboard = get_kb_by_show_employees(
-        role=IsInspector.role,
-        page=1
-    )
+    keyboard = get_kb_by_show_employees(role=IsInspector.role, page=1)
 
     await message.answer(
         "<b>Список инспекторов:</b> (страница 1)",
         parse_mode="HTML",
-        reply_markup=keyboard
+        reply_markup=keyboard,
     )
 
 
@@ -30,15 +27,12 @@ async def handle_inspector_page(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
     page = int(callback.data.split("_")[-1])
 
-    keyboard = get_kb_by_show_employees(
-        role=IsInspector.role,
-        page=page
-    )
+    keyboard = get_kb_by_show_employees(role=IsInspector.role, page=page)
 
     await callback.message.edit_text(
         f"<b>Список инспекторов:</b> (страница {page})",
         parse_mode="HTML",
-        reply_markup=keyboard
+        reply_markup=keyboard,
     )
 
 
