@@ -74,6 +74,15 @@ class Photo(Table):
     file_id = CharField(max_length=128)
 
 
+class Video(Table):
+    """Сведения о видео"""
+
+    message = ForeignKeyField(
+        Message, on_update="CASCADE", on_delete="CASCADE"
+    )
+    file_id = CharField(max_length=128)
+
+
 class Patrol(Table):
     """Класс для сообщения о выезде инспектора"""
 
