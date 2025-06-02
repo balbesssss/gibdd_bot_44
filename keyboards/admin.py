@@ -3,8 +3,10 @@
 from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
 )
-from database.models import User, Admin
+from database.models import User, Admin, Role, UserRole
 
 
 ADMIN_KEYBOARD = [
@@ -41,4 +43,44 @@ def get_kb_by_user(user: User):
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,
+    )
+
+
+def get_kb_by_show_employees(role: Role, page: int, limit: int):
+    """Возвращает клавиатуру пользователей"""
+
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(
+                text=ur.user.full_name,
+                callback_data=f"user_info_{ur.user.id}",
+            )
+        ]
+        for ur in UserRole.select()
+        .where(
+            UserRole.role == role.id
+        )
+        .offset((page - 1) * limit)
+        .limit(limit)
+    ]
+    last_row = []
+    if page > 1:
+        last_row.append(
+            InlineKeyboardButton(
+                text='Назад',
+                callback_data=f"users_page_{page-1}",
+            )
+        )
+    if len(inline_keyboard) == limit:
+        last_row.append(
+            InlineKeyboardButton(
+                text='Вперед',
+                callback_data=f"users_page_{page+1}",
+            )
+        )
+    if last_row:
+        inline_keyboard.append(last_row)
+
+    return InlineKeyboardMarkup(
+        inline_keyboard=inline_keyboard
     )
