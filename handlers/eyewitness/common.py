@@ -111,9 +111,7 @@ async def send_message_to_employ(message: Message, employ: User):
             text=message.caption,
             tg_message_id=msg.message_id,
         )
-        Video.get_or_create(
-            message=message_m, file_id=message.video.file_id
-        )
+        Video.get_or_create(message=message_m, file_id=message.video.file_id)
 
         return
 
