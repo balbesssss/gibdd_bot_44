@@ -112,7 +112,7 @@ async def send_message_to_employ(message: Message, employ: User):
             tg_message_id=msg.message_id,
         )
         Video.get_or_create(
-            message=message_m, file_id=message.photo[0].file_id
+            message=message_m, file_id=message.video.file_id
         )
 
         return
@@ -123,7 +123,7 @@ async def send_message_to_employees(message: Message):
 
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам. "
-        "Вы можете отправить фотографии с места происшествия."
+        "Вы можете отправить фотографии или видео с места происшествия."
     )
     user = User.get(User.tg_id == message.from_user.id)
     if user.is_ban:
