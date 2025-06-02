@@ -24,24 +24,6 @@ async def send_message_to_employ(message: Message, employ: User):
 
     eyewitness: User = User.get(tg_id=message.from_user.id)
 
-    if eyewitness.is_ban:
-        # Удаляем все предыдущие сообщения от забаненного пользователя
-        messages_to_delete = list(MessageM.select().where(
-            (MessageM.from_user == eyewitness)
-            )
-        )
-        for msg in messages_to_delete:
-            try:
-                await message.bot.delete_message(
-                    chat_id=employ.tg_id,
-                    message_id=msg.tg_message_id
-                )
-            except exceptions.TelegramBadRequest as e:
-                print(f"Unexpected error when deleting message: {e}")
-            msg.is_delete = True
-            msg.save()
-        return
-
     last_message: MessageM = (
         MessageM.select()
         .where(
