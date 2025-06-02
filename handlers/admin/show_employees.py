@@ -4,6 +4,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from database.models import User, UserRole, Role
 from filters.admin import IsAdmin
+from filters.inspector import IsInspector
 from keyboards.admin import get_kb_by_show_employees
 
 router = Router()
