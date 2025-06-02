@@ -24,10 +24,6 @@ async def add_role(contact: Contact, role: Role):
     """Добавление роли"""
     user = User.get(User.tg_id == contact.user_id)
 
-    if contact.phone_number and user.phone != contact.phone_number:
-        user.phone = contact.phone_number
-        user.save()
-
     if contact.last_name and user.last_name != contact.last_name:
         user.last_name = contact.last_name
         user.save()
