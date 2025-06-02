@@ -72,6 +72,14 @@ def get_kb_by_show_employees(role: Role | int, page: int, limit: int = 10):
                 callback_data=f"users_page_{role}_{page-1}",
             )
         )
+
+    last_row.append(
+        InlineKeyboardButton(
+            text=f"Страница: {page}",
+            callback_data='alert',
+        )
+    )
+
     if len(inline_keyboard) == limit:
         last_row.append(
             InlineKeyboardButton(
@@ -79,6 +87,7 @@ def get_kb_by_show_employees(role: Role | int, page: int, limit: int = 10):
                 callback_data=f"users_page_{role}_{page+1}",
             )
         )
+
     if last_row:
         inline_keyboard.append(last_row)
 
