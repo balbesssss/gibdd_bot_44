@@ -46,7 +46,7 @@ def get_kb_by_user(user: User):
     )
 
 
-def get_kb_by_show_employees(role: Role, page: int, limit: int):
+def get_kb_by_show_employees(role: Role, page: int, limit: int = 10):
     """Возвращает клавиатуру пользователей"""
 
     inline_keyboard = [
