@@ -20,7 +20,7 @@ async def show_inspectors(message: Message):
         page=1,
         limit=INSPECTORS_PER_PAGE
     )
-    
+
     await message.answer(
         "<b>Список инспекторов:</b> (страница 1)",
         parse_mode="HTML",
@@ -39,7 +39,7 @@ async def handle_inspector_page(callback: CallbackQuery):
         page=page,
         limit=INSPECTORS_PER_PAGE
     )
-    
+
     await callback.message.edit_text(
         f"<b>Список инспекторов:</b> (страница {page})",
         parse_mode="HTML",
