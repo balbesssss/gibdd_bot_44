@@ -82,8 +82,8 @@ class Location(Table):
     )
     longitude = FloatField()
     latitude = FloatField()
-    
-    
+
+
 class Video(Table):
     """Сведения о видео"""
 

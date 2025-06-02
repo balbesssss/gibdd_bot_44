@@ -2,7 +2,6 @@
 
 from typing import List
 from aiogram.types import Message
-from aiogram import exceptions
 from filters import IsAdmin, IsInspector
 from database.models import (
     User,
