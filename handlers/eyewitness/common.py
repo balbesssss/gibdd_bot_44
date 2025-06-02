@@ -144,8 +144,10 @@ async def send_message_to_employees(message: Message):
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам."
         "Вы можете отправить фотографии или видео с места происшествия."
-        "Если хотите отправить геолокацию, нажмите кнопку ниже:",
-        reply_markup=eyewitness_kb
+        "Если хотите отправить геолокацию, нажмите кнопку ниже:"
+        "<b>Отправить геолокацию</b>",
+        reply_markup=eyewitness_kb,
+        parse_mode='HTML',
     )
 
     user = User.get(User.tg_id == message.from_user.id)
