@@ -15,7 +15,7 @@ async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
 
     await message.answer(
-        "<b>Список инспекторов:</b> (страница 1)",
+        "<b>Список инспекторов:</b>",
         parse_mode="HTML",
         reply_markup=get_kb_by_show_employees(
             role=IsInspector.role, 
@@ -29,12 +29,11 @@ async def go_to_page_handler(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
 
     args = callback.data.split("_")
+    page = int(args[-1])
 
-    await callback.message.edit_text(
-        f"<b>Список инспекторов:</b> (страница {page})",
-        parse_mode="HTML",
+    await callback.message.edit_reply_markup(
         reply_markup=get_kb_by_show_employees(
-            page=int(args[-1]),
+            page=page,
             role=int(args[-2]),
         ),
     )
@@ -45,11 +44,11 @@ async def show_admins(message: Message):
     """Отображает список администраторов администратору."""
 
     await message.answer(
-        "<b>Список администраторов:</b> (страница 1)",
+        "<b>Список администраторов:</b>",
         parse_mode="HTML",
         reply_markup=get_kb_by_show_employees(
             role=IsAdmin.role,
             page=1
-        )
+        ),
     )
 
