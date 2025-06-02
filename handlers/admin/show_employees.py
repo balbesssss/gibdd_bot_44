@@ -2,7 +2,6 @@
 
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
-from database.models import User, UserRole
 from filters.admin import IsAdmin
 from filters.inspector import IsInspector
 from keyboards.admin import get_kb_by_show_employees
@@ -18,7 +17,7 @@ async def show_inspectors(message: Message):
         "<b>Список инспекторов:</b>",
         parse_mode="HTML",
         reply_markup=get_kb_by_show_employees(
-            role=IsInspector.role, 
+            role=IsInspector.role,
             page=1
         ),
     )
@@ -51,4 +50,3 @@ async def show_admins(message: Message):
             page=1
         ),
     )
-
