@@ -1,5 +1,6 @@
 """Клавиатуры для Администратора"""
 
+from typing import Op
 from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
@@ -46,8 +47,11 @@ def get_kb_by_user(user: User):
     )
 
 
-def get_kb_by_show_employees(role: Role, page: int, limit: int = 10):
+def get_kb_by_show_employees(role: Role | int, page: int, limit: int = 10):
     """Возвращает клавиатуру пользователей"""
+
+    if isinstance(role, Role):
+        role = role.id
 
     inline_keyboard = [
         [
@@ -57,7 +61,7 @@ def get_kb_by_show_employees(role: Role, page: int, limit: int = 10):
             )
         ]
         for ur in UserRole.select()
-        .where(UserRole.role == role.id)
+        .where(UserRole.role == role)
         .offset((page - 1) * limit)
         .limit(limit)
     ]
@@ -66,14 +70,14 @@ def get_kb_by_show_employees(role: Role, page: int, limit: int = 10):
         last_row.append(
             InlineKeyboardButton(
                 text="Назад",
-                callback_data=f"users_page_{page-1}",
+                callback_data=f"users_page_{role}_{page-1}",
             )
         )
     if len(inline_keyboard) == limit:
         last_row.append(
             InlineKeyboardButton(
                 text="Вперед",
-                callback_data=f"users_page_{page+1}",
+                callback_data=f"users_page_{role}_{page+1}",
             )
         )
     if last_row:
