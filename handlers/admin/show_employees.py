@@ -33,7 +33,7 @@ async def handle_inspector_page(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
     page = int(callback.data.split("_")[2])
     inspector_role = Role.get(name="Инспектор")
-    
+
     keyboard = get_kb_by_show_employees(
         role=inspector_role,
         page=page,
