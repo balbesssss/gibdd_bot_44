@@ -9,6 +9,7 @@ from peewee import (
     DateTimeField,
     ForeignKeyField,
     BooleanField,
+    FloatField,
 )
 
 # pylint: disable=R0903
@@ -79,8 +80,8 @@ class Location(Table):
     message = ForeignKeyField(
         Message, on_update="CASCADE", on_delete="CASCADE"
     )
-    longitude = CharField(max_length=20)
-    latitude = CharField(max_length=20)
+    longitude = FloatField()
+    latitude = FloatField()
     
     
 class Video(Table):
