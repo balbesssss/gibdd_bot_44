@@ -9,6 +9,7 @@ from database.models import (
     UserRole,
     Photo,
     Patrol,
+    Video,
     Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
@@ -92,13 +93,37 @@ async def send_message_to_employ(message: Message, employ: User):
         )
         return
 
+    if message.video:
+
+        msg = await message.bot.send_video(
+            chat_id=employ.tg_id,
+            video=message.video.file_id,
+            caption=message.caption,
+            reply_markup=user_ban_kb(eyewitness.tg_id),
+            reply_to_message_id=(
+                last_message.tg_message_id if last_message else None
+            ),
+        )
+
+        message_m, _ = MessageM.get_or_create(
+            from_user=eyewitness,
+            to_user=employ,
+            text=message.caption,
+            tg_message_id=msg.message_id,
+        )
+        Video.get_or_create(
+            message=message_m, file_id=message.video.file_id
+        )
+
+        return
+
 
 async def send_message_to_employees(message: Message):
     """Отправка сообщений сотрудникам"""
 
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам. "
-        "Вы можете отправить фотографии с места происшествия."
+        "Вы можете отправить фотографии или видео с места происшествия."
     )
     user = User.get(User.tg_id == message.from_user.id)
     if user.is_ban:
