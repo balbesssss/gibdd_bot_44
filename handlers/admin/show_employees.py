@@ -2,7 +2,7 @@
 
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
-from database.models import User, UserRole, Role
+from database.models import User, UserRole
 from filters.admin import IsAdmin
 from filters.inspector import IsInspector
 from keyboards.admin import get_kb_by_show_employees
@@ -13,11 +13,8 @@ router = Router()
 @router.message(F.text == "Показать инспекторов", IsAdmin())
 async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
-    inspectors = (
-        User.select().join(UserRole).where(UserRole.role == IsInspector.role)
-    )
     keyboard = get_kb_by_show_employees(
-        role=inspectors,
+        role=IsInspector.role,
         page=1
     )
 
@@ -32,10 +29,9 @@ async def show_inspectors(message: Message):
 async def handle_inspector_page(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
     page = int(callback.data.split("_")[-1])
-    inspector_role = Role.get(name="Инспектор")
 
     keyboard = get_kb_by_show_employees(
-        role=inspector_role,
+        role=IsInspector.role,
         page=page
     )
 
