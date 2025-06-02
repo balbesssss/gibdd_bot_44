@@ -8,17 +8,16 @@ from keyboards.admin import get_kb_by_show_employees
 
 router = Router()
 
-INSPECTORS_PER_PAGE = 10
-
 
 @router.message(F.text == "Показать инспекторов", IsAdmin())
 async def show_inspectors(message: Message):
     """Отображает список инспекторов администратору."""
-    inspector_role = Role.get(name="Инспектор")
+    inspectors = (
+        User.select().join(UserRole).where(UserRole.role == IsInspector.role)
+    )
     keyboard = get_kb_by_show_employees(
-        role=inspector_role,
-        page=1,
-        limit=INSPECTORS_PER_PAGE
+        role=IsInspector.role,
+        page=1
     )
 
     await message.answer(
@@ -31,13 +30,12 @@ async def show_inspectors(message: Message):
 @router.callback_query(F.data.startswith("users_page_"), IsAdmin())
 async def handle_inspector_page(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
-    page = int(callback.data.split("_")[2])
+    page = int(callback.data.split("_")[-1])
     inspector_role = Role.get(name="Инспектор")
 
     keyboard = get_kb_by_show_employees(
         role=inspector_role,
-        page=page,
-        limit=INSPECTORS_PER_PAGE
+        page=page
     )
 
     await callback.message.edit_text(
@@ -45,7 +43,6 @@ async def handle_inspector_page(callback: CallbackQuery):
         parse_mode="HTML",
         reply_markup=keyboard
     )
-    await callback.answer()
 
 
 @router.message(F.text == "Показать администраторов", IsAdmin())
