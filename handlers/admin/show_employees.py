@@ -26,12 +26,13 @@ async def show_inspectors(message: Message):
 
 
 @router.callback_query(F.data.startswith("users_page_"), IsAdmin())
-async def handle_inspector_page(callback: CallbackQuery):
+async def go_to_page_handler(callback: CallbackQuery):
     """Обрабатывает переход по страницам инспекторов"""
-    page = int(callback.data.split("_")[-1])
-
+    args = callback.data.split("_")
+    page = int(args[-1])
+    role_id = int(args[-2])
     keyboard = get_kb_by_show_employees(
-        role=IsInspector.role,
+        role=role_id,
         page=page
     )
 
@@ -45,23 +46,14 @@ async def handle_inspector_page(callback: CallbackQuery):
 @router.message(F.text == "Показать администраторов", IsAdmin())
 async def show_admins(message: Message):
     """Отображает список администраторов администратору."""
-    admins = User.select().join(UserRole).where(UserRole.role == IsAdmin.role)
-
-    if not admins:
-        await message.answer("Список администраторов пуст")
-        return
-
-    admins_list = "<b>Список администраторов:</b>\n"
-    for index, admin in enumerate(admins, 1):
-        full_name = f"{admin.first_name or ''} {admin.last_name or ''}".strip()
-        if admin.username:
-            admin_entry = (
-                f'{index}. <a href="https://t.me/{admin.username}">'
-                f"{full_name}</a>"
-            )
-        else:
-            admin_entry = f"{index}. {full_name}"
-        admins_list += admin_entry + "\n"
-    await message.answer(
-        admins_list, parse_mode="HTML", disable_web_page_preview=True
+    keyboard = get_kb_by_show_employees(
+        role=IsAdmin.role,
+        page=1
     )
+
+    await message.answer(
+        "<b>Список администраторов:</b> (страница 1)",
+        parse_mode="HTML",
+        reply_markup=keyboard
+    )
+
