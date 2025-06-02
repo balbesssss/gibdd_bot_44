@@ -82,7 +82,8 @@ class Location(Table):
     longitude = CharField(max_length=20)
     latitude = CharField(max_length=20)
     
-  class Video(Table):
+    
+class Video(Table):
     """Сведения о видео"""
 
     message = ForeignKeyField(

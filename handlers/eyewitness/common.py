@@ -15,7 +15,7 @@ from database.models import (
     Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
-from keyboards.user import get_location_request_kb
+from keyboards.eyewitness import KB as eyewitness_kb
 # pylint: disable=E1101
 
 
@@ -161,11 +161,12 @@ async def send_message_to_employees(message: Message):
     """Отправка сообщений сотрудникам"""
 
     await message.answer(
-        "Спасибо за обращение. Мы его уже передали инспекторам. "
+        "Спасибо за обращение. Мы его уже передали инспекторам."
         "Вы можете отправить фотографии или видео с места происшествия."
         "Если хотите отправить геолокацию, нажмите кнопку ниже:",
-        reply_markup=get_location_request_kb()
+        reply_markup=eyewitness_kb
     )
+
     user = User.get(User.tg_id == message.from_user.id)
     if user.is_ban:
         return
