@@ -57,9 +57,7 @@ def get_kb_by_show_employees(role: Role, page: int, limit: int):
             )
         ]
         for ur in UserRole.select()
-        .where(
-            UserRole.role == role.id
-        )
+        .where(UserRole.role == role.id)
         .offset((page - 1) * limit)
         .limit(limit)
     ]
@@ -67,20 +65,18 @@ def get_kb_by_show_employees(role: Role, page: int, limit: int):
     if page > 1:
         last_row.append(
             InlineKeyboardButton(
-                text='Назад',
+                text="Назад",
                 callback_data=f"users_page_{page-1}",
             )
         )
     if len(inline_keyboard) == limit:
         last_row.append(
             InlineKeyboardButton(
-                text='Вперед',
+                text="Вперед",
                 callback_data=f"users_page_{page+1}",
             )
         )
     if last_row:
         inline_keyboard.append(last_row)
 
-    return InlineKeyboardMarkup(
-        inline_keyboard=inline_keyboard
-    )
+    return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
