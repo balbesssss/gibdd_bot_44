@@ -76,7 +76,7 @@ def get_kb_by_show_employees(role: Role | int, page: int, limit: int = 10):
     last_row.append(
         InlineKeyboardButton(
             text=f"Страница: {page}",
-            callback_data='alert',
+            callback_data="alert",
         )
     )
 
