@@ -111,10 +111,8 @@ class Admin(Table):
 if __name__ == "__main__":
     DB.connect()
     DB.create_tables(
-        [
-            User, Role, UserRole, Message,
-            Patrol, Admin, Photo, Location
-        ], safe=True
+        [User, Role, UserRole, Message, Patrol, Admin, Photo, Location],
+        safe=True,
     )
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")

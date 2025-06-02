@@ -15,6 +15,7 @@ from database.models import (
 )
 from keyboards.inspector import user_ban_kb
 from keyboards.eyewitness import KB as eyewitness_kb
+
 # pylint: disable=E1101
 
 
@@ -58,20 +59,22 @@ async def send_message_to_employ(message: Message, employ: User):
             chat_id=employ.tg_id,
             latitude=message.location.latitude,
             longitude=message.location.longitude,
-            reply_to_message_id=last_message.tg_message_id
-            if last_message else None
-            )
+            reply_to_message_id=(
+                last_message.tg_message_id if last_message else None
+            ),
+        )
 
         loc_message = MessageM.create(
             to_user=employ,
             from_user=eyewitness,
             text="Геолокация",
-            tg_message_id=send_message.message_id)
+            tg_message_id=send_message.message_id,
+        )
 
         Location.get_or_create(
             message=loc_message,
             longitude=message.location.longitude,
-            latitude=message.location.latitude
+            latitude=message.location.latitude,
         )
         return
 
@@ -147,7 +150,7 @@ async def send_message_to_employees(message: Message):
         "Если хотите отправить геолокацию, нажмите кнопку ниже: "
         "<b>Отправить геолокацию</b>",
         reply_markup=eyewitness_kb,
-        parse_mode='HTML',
+        parse_mode="HTML",
     )
 
     user = User.get(User.tg_id == message.from_user.id)

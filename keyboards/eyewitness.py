@@ -7,10 +7,10 @@ KB = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(
-                text='Отправить геолокацию',
+                text="Отправить геолокацию",
                 request_location=True,
-                callback_data='request_location',
+                callback_data="request_location",
             )
         ]
-    ]
+    ],
 )
