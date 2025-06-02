@@ -9,11 +9,12 @@ from database.models import (
     UserRole,
     Photo,
     Patrol,
+    Location,
     Video,
     Message as MessageM,
 )
 from keyboards.inspector import user_ban_kb
-
+from keyboards.eyewitness import KB as eyewitness_kb
 # pylint: disable=E1101
 
 
@@ -52,8 +53,29 @@ async def send_message_to_employ(message: Message, employ: User):
             await send_message_to_employ(message, employ)
             return
 
-    if message.text:
+    if message.location:
+        send_message = await message.bot.send_location(
+            chat_id=employ.tg_id,
+            latitude=message.location.latitude,
+            longitude=message.location.longitude,
+            reply_to_message_id=last_message.tg_message_id
+            if last_message else None
+            )
 
+        loc_message = MessageM.create(
+            to_user=employ,
+            from_user=eyewitness,
+            text="Геолокация",
+            tg_message_id=send_message.message_id)
+
+        Location.get_or_create(
+            message=loc_message,
+            longitude=message.location.longitude,
+            latitude=message.location.latitude
+        )
+        return
+
+    if message.text:
         msg = await message.bot.send_message(
             chat_id=employ.tg_id,
             text=message.text,
@@ -121,8 +143,13 @@ async def send_message_to_employees(message: Message):
 
     await message.answer(
         "Спасибо за обращение. Мы его уже передали инспекторам. "
-        "Вы можете отправить фотографии или видео с места происшествия."
+        "Вы можете отправить фотографии или видео с места происшествия. "
+        "Если хотите отправить геолокацию, нажмите кнопку ниже: "
+        "<b>Отправить геолокацию</b>",
+        reply_markup=eyewitness_kb,
+        parse_mode='HTML',
     )
+
     user = User.get(User.tg_id == message.from_user.id)
     if user.is_ban:
         return

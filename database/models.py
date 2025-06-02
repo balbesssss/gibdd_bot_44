@@ -9,6 +9,7 @@ from peewee import (
     DateTimeField,
     ForeignKeyField,
     BooleanField,
+    FloatField,
 )
 
 # pylint: disable=R0903
@@ -73,6 +74,16 @@ class Photo(Table):
     file_id = CharField(max_length=128)
 
 
+class Location(Table):
+    """Класс для хранения геолокационных данных"""
+
+    message = ForeignKeyField(
+        Message, on_update="CASCADE", on_delete="CASCADE"
+    )
+    longitude = FloatField()
+    latitude = FloatField()
+
+
 class Video(Table):
     """Сведения о видео"""
 
@@ -100,7 +111,10 @@ class Admin(Table):
 if __name__ == "__main__":
     DB.connect()
     DB.create_tables(
-        [User, Role, UserRole, Message, Patrol, Admin, Photo], safe=True
+        [
+            User, Role, UserRole, Message,
+            Patrol, Admin, Photo, Location
+        ], safe=True
     )
     DB.close()
     admin_role, _ = Role.get_or_create(name="Администратор")
