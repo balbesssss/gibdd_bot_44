@@ -139,6 +139,28 @@ async def send_message_to_employ(message: Message, employ: User):
         Video.get_or_create(message=message_m, file_id=message.video.file_id)
 
         return
+    
+    if message.animation:
+
+        msg = await message.bot.send_video(
+            chat_id=employ.tg_id,
+            video=message.animation.file_id,
+            caption=message.caption,
+            reply_markup=user_ban_kb(eyewitness.tg_id),
+            reply_to_message_id=(
+                last_message.tg_message_id if last_message else None
+            ),
+        )
+
+        message_m, _ = MessageM.get_or_create(
+            from_user=eyewitness,
+            to_user=employ,
+            text=message.caption,
+            tg_message_id=msg.message_id,
+        )
+        Video.get_or_create(message=message_m, file_id=message.animation.file_id)
+
+        return
 
 
 async def send_message_to_employees(message: Message):
