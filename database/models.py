@@ -32,7 +32,6 @@ class User(Table):
     username = CharField(null=True)
     last_name = CharField(null=True)
     first_name = CharField(null=True)
-    phone = IntegerField(null=True)
     is_ban = BooleanField(default=False)
 
     @property
