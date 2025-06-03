@@ -14,7 +14,7 @@ class IsEmployee(IsUser):
             return False
 
         user_role = UserRole.get_or_none(
-            (UserRole.user==User.get(tg_id=message.from_user.id))
+            (UserRole.user == User.get(tg_id=message.from_user.id))
             & (UserRole.role.in_((IsAdmin.role, IsInspector.role)))
         )
         return user_role is not None
