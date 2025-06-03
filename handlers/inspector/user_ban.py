@@ -12,7 +12,17 @@ from database.models import Message, User, UserRole
 router = Router()
 
 
-@router.callback_query(F.data.startswith("ban_"), (IsInspector() | IsAdmin()))
+
+@router.callback_query(F.data.startswith("ban_"), IsAdmin()())
+async def show_inspect(callback: CallbackQuery):
+    """Подтверждение блокирования пользователя."""
+    user_id = callback.data.split("_")[-1]
+    await callback.message.edit_reply_markup(
+        reply_markup=user_ban_cobfirm_and_cancel_kb(user_id)
+    )
+
+
+@router.callback_query(F.data.startswith("ban_"), IsInspector())
 async def show_inspectors(callback: CallbackQuery):
     """Подтверждение блокирования пользователя."""
     user_id = callback.data.split("_")[-1]
