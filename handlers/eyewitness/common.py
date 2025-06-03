@@ -13,7 +13,7 @@ from database.models import (
     Video,
     Message as MessageM,
 )
-from keyboards.inspector import user_ban_kb
+from keyboards.employee import user_ban_kb
 from keyboards.eyewitness import KB as eyewitness_kb
 
 # pylint: disable=E1101
