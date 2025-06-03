@@ -12,7 +12,7 @@ from database.models import Message, User, UserRole
 router = Router()
 
 
-@router.callback_query(F.data.startswith("ban_"), IsInspector())
+@router.callback_query(F.data.startswith("ban_"), IsInspector() | IsAdmin())
 async def show_inspectors(callback: CallbackQuery):
     """Подтверждение блокирования пользователя."""
     user_id = callback.data.split("_")[-1]
