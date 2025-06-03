@@ -12,7 +12,6 @@ from database.models import Message, User, UserRole
 router = Router()
 
 
-
 @router.callback_query(F.data.startswith("ban_"), IsAdmin())
 async def show_inspect(callback: CallbackQuery):
     """Подтверждение блокирования пользователя."""
