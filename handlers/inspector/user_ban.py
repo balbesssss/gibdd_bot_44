@@ -29,6 +29,7 @@ async def show_inspectors(callback: CallbackQuery):
         reply_markup=user_ban_cobfirm_and_cancel_kb(user_id)
     )
 
+
 @router.callback_query(F.data.startswith("user_ban_confirm_"), IsAdmin())
 @router.callback_query(F.data.startswith("user_ban_confirm_"), IsInspector())
 async def blocking_user(callback: CallbackQuery):
@@ -70,6 +71,7 @@ async def blocking_user(callback: CallbackQuery):
             ),
         )
         await sleep(0.5)
+
 
 @router.callback_query(F.data.startswith("user_ban_cancel_"), IsAdmin())
 @router.callback_query(F.data.startswith("user_ban_cancel_"), IsInspector())
