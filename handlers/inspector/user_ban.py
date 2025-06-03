@@ -13,7 +13,7 @@ router = Router()
 
 
 
-@router.callback_query(F.data.startswith("ban_"), IsAdmin()())
+@router.callback_query(F.data.startswith("ban_"), IsAdmin())
 async def show_inspect(callback: CallbackQuery):
     """Подтверждение блокирования пользователя."""
     user_id = callback.data.split("_")[-1]
