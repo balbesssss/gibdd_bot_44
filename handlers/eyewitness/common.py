@@ -51,8 +51,8 @@ async def send_message_to_employ(message: Message, employ: User):
     #             tg_message_id=msg.message_id,
     #         )
 
-            # await send_message_to_employ(message, employ)
-            # return
+    # await send_message_to_employ(message, employ)
+    # return
 
     if message.location:
         send_message = await message.bot.send_location(
