@@ -38,10 +38,7 @@ async def send_message_to_employ(message: Message, employ: User):
     if last_message is None:
         last_message = (
             MessageM.select()
-            .where(
-                (MessageM.from_user == eyewitness)
-                & (~MessageM.is_delete)
-            )
+            .where((MessageM.from_user == eyewitness) & (~MessageM.is_delete))
             .order_by(MessageM.id.desc())
             .first()
         )
