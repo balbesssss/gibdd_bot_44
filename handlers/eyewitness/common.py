@@ -27,35 +27,40 @@ async def send_message_to_employ(message: Message, employ: User):
     last_message: MessageM = (
         MessageM.select()
         .where(
-            (MessageM.from_user == eyewitness) & (MessageM.to_user == employ)
+            (MessageM.from_user == eyewitness)
+            & (MessageM.to_user == employ)
+            & (~MessageM.is_delete)
         )
         .order_by(MessageM.id.desc())
         .first()
     )
 
-    # if last_message is None:
-    #     last_message = (
-    #         MessageM.select()
-    #         .where((MessageM.from_user == eyewitness))
-    #         .order_by(MessageM.id.desc())
-    #         .first()
-    #     )
-    #     if last_message:
-    #         msg: Message = await message.bot.send_message(
-    #             chat_id=employ.tg_id, text=last_message.text
-    #         )
-    #         MessageM.get_or_create(
-    #             to_user=eyewitness,
-    #             from_user=employ,
-    #             text=last_message.text,
-    #             tg_message_id=msg.message_id,
-    #         )
+    if last_message is None:
+        last_message = (
+            MessageM.select()
+            .where(
+                (MessageM.from_user == eyewitness)
+                & (~MessageM.is_delete)
+            )
+            .order_by(MessageM.id.desc())
+            .first()
+        )
+        if last_message:
+            msg: Message = await message.bot.send_message(
+                chat_id=employ.tg_id, text=last_message.text
+            )
+            MessageM.get_or_create(
+                to_user=eyewitness,
+                from_user=employ,
+                text=last_message.text,
+                tg_message_id=msg.message_id,
+            )
 
-    # await send_message_to_employ(message, employ)
-    # return
+        await send_message_to_employ(message=message, employ=employ)
+        return
 
     if message.location:
-        send_message = await message.bot.send_location(
+        send_message: Message = await message.bot.send_location(
             chat_id=employ.tg_id,
             latitude=message.location.latitude,
             longitude=message.location.longitude,
