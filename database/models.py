@@ -34,6 +34,8 @@ class User(Table):
     last_name = CharField(null=True)
     first_name = CharField(null=True)
     is_ban = BooleanField(default=False)
+    ban_counter = IntegerField(default=0)
+    ban_end_date = DateTimeField(null=True)
 
     @property
     def full_name(self):
